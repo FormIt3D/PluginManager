@@ -146,7 +146,9 @@ class PluginItem extends React.Component {
 
     componentDidUpdate(){
         if (this.state.active){
-            this.previewRef.current.focus();
+            if (this.previewRef && this.previewRef.current){
+                this.previewRef.current.focus();
+            }
         }
     }
 
