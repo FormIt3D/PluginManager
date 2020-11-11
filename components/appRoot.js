@@ -60,7 +60,7 @@ class AppRoot extends React.Component {
         //TODO async wrapper to avoid this
         FormItInterface.CallMethod("FormIt.GetInstalledPlugins", "", async (installedPlugins) => {
 
-            installedPlugins = JSON.parse(installedPlugins);
+            installedPlugins = JSON.parse(installedPlugins).filter(p => p);
 
             //debugger;
             const checkInstalled = (plugin) => {
@@ -135,7 +135,7 @@ class AppRoot extends React.Component {
 
     addPlugin(pluginUrl){
         this.toggleInstallPlugin({
-            url:pluginUrl
+            local_url:pluginUrl
         }, true);
     }
 
