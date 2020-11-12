@@ -181,6 +181,7 @@ class AppRoot extends React.Component {
                     }, null),
                     React.createElement(PluginList, {
                         pluginGroup: 'Recommended',
+                        groupDescription: 'Plugins recommended by the FormIt team',
                         isOpen: true,
                         plugins:this.state.plugins.recommendedPlugins,
                         toggleInstallPlugin: this.toggleInstallPlugin.bind(this),
@@ -188,12 +189,14 @@ class AppRoot extends React.Component {
                     }, null),
                     React.createElement(PluginList, {
                         pluginGroup: 'Public',
+                        groupDescription: 'Find plugins built by the community',
                         plugins:this.state.plugins.publicPlugins,
                         toggleInstallPlugin: this.toggleInstallPlugin.bind(this),
                         key:'Public'
                     }, null),
                     React.createElement(PluginList, {
-                        pluginGroup: 'Needs approval (TODO admin only)',
+                        pluginGroup: 'Needs approval',
+                        groupDescription: 'Admin only',
                         plugins:this.state.plugins.needsApprovalPlugins,
                         toggleInstallPlugin: this.toggleInstallPlugin.bind(this),
                         key:'Needsapproval'

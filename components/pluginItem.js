@@ -100,8 +100,9 @@ class PluginItem extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            active: false
+            active: false,
             //isInstalled : this.props.pluginData.isInstalled
+            iconUrl: ''
         };
 
         this.previewRef = React.createRef();
@@ -129,6 +130,15 @@ class PluginItem extends React.Component {
             this.setState({
                 manifest: manifestJSON
             });
+
+            if (manifestJSON && manifestJSON.PanelIcon){
+                const iconUrl = this.props.pluginData.git_url 
+                    ? `https://${this.props.pluginData.owner.login}.github.io/${this.props.pluginData.name}/${manifestJSON.PanelIcon.replace('PLUGINLOCATION', '')}`
+                    : `${this.props.pluginData.local_url}/${manifestJSON.PanelIcon.replace('PLUGINLOCATION', '')}`;
+
+                this.setState({iconUrl})
+            }
+            
         }catch(e){
             console.log('Could not fetch manifest for', this.props.pluginData, e);
         }
@@ -224,7 +234,7 @@ class PluginItem extends React.Component {
                         id: this.props.pluginData.id + 'switchInput',
                         name: this.props.pluginData.id + 'switchInput',
                         key: this.props.pluginData.id + 'switchInput',
-                        className: 'switch is-rounded is-info',
+                        className: 'switch is-rounded is-success',
                         type:'checkbox',
                         checked: this.props.pluginData.isInstalled,
                         //defaultChecked: this.props.pluginData.isInstalled,//this.state.isInstalled,
@@ -358,7 +368,23 @@ class PluginItem extends React.Component {
                             'div',
                             {
                                 key: this.props.pluginData.id + 'col1',
-                                className: 'column'
+                                className: 'column pluginIcon'
+                            },
+                            this.state.iconUrl
+                                ? React.createElement(
+                                    'img',
+                                    {
+                                        src: this.state.iconUrl
+                                    },
+                                    null
+                                )
+                                : null
+                        ),
+                        React.createElement(
+                            'div',
+                            {
+                                key: this.props.pluginData.id + 'col2',
+                                className: 'column pluginContent is-three-quarters'
                                 
                             },
                             [
@@ -371,12 +397,11 @@ class PluginItem extends React.Component {
                         React.createElement(
                             'div',
                             {
-                                key: this.props.pluginData.id + 'col2',
-                                className: 'column is-one-quarter pluginControls'
+                                key: this.props.pluginData.id + 'col3',
+                                className: 'column pluginControls'
                             },
                             pluginInstallButton,
                             githubButton,
-                            
                         )
                     ]
                 ),

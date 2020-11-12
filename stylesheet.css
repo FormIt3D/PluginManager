@@ -14,6 +14,7 @@
 }
 
 #InstallPluginControls{
+    border-top:solid 1px gray;
     margin-bottom:10px;
     padding:10px;
     position: relative;
@@ -30,7 +31,7 @@
 
 #InstallPluginControls a{
     position: absolute;
-    top:9px;
+    top:33px;
     right:10px;
 }
 
@@ -53,7 +54,7 @@ li .field {
 
 .pluginName{
     font-weight:bold;
-    width: 220px;
+    width: 165px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -61,14 +62,13 @@ li .field {
 
 .pluginDescription{
     font-size:12px;
-    width: 240px;
+    width: 200px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .githubButton{
-    margin-top: 8px;
     margin-right: 10px;
     display: inline-block;
 }
@@ -180,6 +180,16 @@ li .field {
     float:right;
 }
 
+.pluginList li .pluginIcon{
+    padding-right:0px;
+    max-width: 40px;
+    margin-top: 16px;
+}
+
+.pluginList li .pluginContent{
+    padding-left:10px 0 0 0;
+}
+
 .groupHeader{
     cursor:pointer;
     margin-left:5px;
@@ -188,6 +198,12 @@ li .field {
 
 .groupHeader i{
     margin-right:5px;
+}
+
+.groupHeader .groupDescription {
+    font-size: 11px;
+    margin-left: 10px;
+    color: gray;
 }
 
 .groupHeader .count{

@@ -13,7 +13,7 @@ class InstallPluginControls extends React.Component {
             key: 'installInput',
             className: 'input',
             type: 'text',
-            placeholder: 'Add Plugin URL',
+            placeholder: 'https://your-plugin.com',
             value: this.state.installUrl || '',
             onChange: (e) => {
                 const value = e.target.value;
@@ -27,6 +27,12 @@ class InstallPluginControls extends React.Component {
                 key: 'InstallPluginControls',
             },
             [
+                React.createElement('div',
+                {
+                    key:'addDesc'
+                }
+                ,
+                'Add your private or local plugin:'),
                 input,
                 React.createElement('a',
                     {

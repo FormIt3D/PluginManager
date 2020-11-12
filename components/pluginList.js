@@ -44,11 +44,21 @@ class PluginList extends React.Component {
                         React.createElement(
                             'span',
                             {
-                                className:'',
+                                className:'pluginGroupName',
                                 key:'name'
                             },
                             this.props.pluginGroup
                         ),
+                        this.props.groupDescription
+                        ? React.createElement(
+                            'span',
+                            {
+                                className:'groupDescription',
+                                key:'name'
+                            },
+                            this.props.groupDescription
+                        )
+                        : null,
                         React.createElement(
                             'div',
                             {
