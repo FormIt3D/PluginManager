@@ -3,6 +3,7 @@
 import PluginList from "./pluginList.js";
 import InstallPluginControls from "./installPluginControls.js";
 import approvedPlugins from "./../approvedPlugins.js";
+import promotedPlugins from "./../promotedPlugins.js";
 
 import { Octokit } from "https://cdn.skypack.dev/@octokit/rest";
 
@@ -62,17 +63,16 @@ class AppRoot extends React.Component {
 
             installedPlugins = JSON.parse(installedPlugins).filter(p => p);
 
-            //debugger;
             const checkInstalled = (plugin) => {
                 //For now, going to make a "guess" at github pages url. This is because we'd have to make an 
                 //API request for each repo, and I don't want to worry about rate limiting.
                 const pagesUrl = `https://${plugin.owner.login}.github.io/${plugin.name}`;
 
                 const installedIndex = installedPlugins.indexOf(pagesUrl);
-
                 plugin.isInstalled = installedIndex > -1;
-                //debugger;
-                //console.log(plugin.isInstalled, pagesUrl, installedPlugins);
+
+                //Also check if the plugin is a recommended plugin.
+                plugin.isPromoted = promotedPlugins.indexOf(plugin.html_url) > -1;
 
                 //Hacky, a better way to do this? Not thinking clearly.
                 installedPlugins[installedIndex] = plugin;
@@ -80,9 +80,16 @@ class AppRoot extends React.Component {
                 return plugin;
             };
 
-            const recommendedPlugins = plugins.recommendedPlugins.map(checkInstalled);
-            const publicPlugins = plugins.publicPlugins.map(checkInstalled);
-            const needsApprovalPlugins = plugins.needsApprovalPlugins.map(checkInstalled);
+            const sortFunc = (a,b) => {
+                //first sort by isPromoted, if same sort by next || 
+                return Number(b.isPromoted) - Number(a.isPromoted)
+                    || a.stargazers_count - b.stargazers_count 
+                    || a.name.localeCompare(b.name);
+            }
+
+            const recommendedPlugins = plugins.recommendedPlugins.map(checkInstalled).sort(sortFunc);
+            const publicPlugins = plugins.publicPlugins.map(checkInstalled).sort(sortFunc);
+            const needsApprovalPlugins = plugins.needsApprovalPlugins.map(checkInstalled).sort(sortFunc);
 
             installedPlugins = installedPlugins.map((plugin) => {
                 if (typeof plugin === 'object'){
@@ -166,10 +173,6 @@ class AppRoot extends React.Component {
                 },
                 [
                     //'TODO search',
-                    React.createElement(InstallPluginControls, {
-                        addPlugin: this.addPlugin.bind(this),
-                        key:'AddPlugin'
-                    }, null),
                     React.createElement(PluginList, {
                         pluginGroup: 'Installed',
                         plugins:this.state.plugins.installedPlugins,
@@ -178,6 +181,7 @@ class AppRoot extends React.Component {
                     }, null),
                     React.createElement(PluginList, {
                         pluginGroup: 'Recommended',
+                        isOpen: true,
                         plugins:this.state.plugins.recommendedPlugins,
                         toggleInstallPlugin: this.toggleInstallPlugin.bind(this),
                         key:'Recommended'
@@ -193,7 +197,11 @@ class AppRoot extends React.Component {
                         plugins:this.state.plugins.needsApprovalPlugins,
                         toggleInstallPlugin: this.toggleInstallPlugin.bind(this),
                         key:'Needsapproval'
-                    }, null)
+                    }, null),
+                    React.createElement(InstallPluginControls, {
+                        addPlugin: this.addPlugin.bind(this),
+                        key:'AddPlugin'
+                    }, null),
                 ]
             );
         }else{

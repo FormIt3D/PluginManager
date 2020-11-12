@@ -227,7 +227,7 @@ class PluginItem extends React.Component {
                         className: 'switch is-rounded is-info',
                         type:'checkbox',
                         checked: this.props.pluginData.isInstalled,
-                        defaultChecked: this.props.pluginData.isInstalled,//this.state.isInstalled,
+                        //defaultChecked: this.props.pluginData.isInstalled,//this.state.isInstalled,
                         onChange: this.handleToggleChange.bind(this),
                         
                     }
@@ -244,99 +244,30 @@ class PluginItem extends React.Component {
             ]
         );
 
-        if(!this.props.pluginData.git_url){
+        const pluginName = React.createElement(
+            'div',
+            {
+                key: this.props.id + 'name',
+                className: 'pluginName'
+            },
+            this.state.manifest
+                ? this.state.manifest.PluginName 
+                : this.props.pluginData.name || this.props.pluginData.local_url
+        );
 
-            const pluginName = React.createElement(
-                'div',
-                {
-                    key: this.props.id + 'name',
-                    className: 'pluginName'
-                },
-                this.state.manifest
-                    ? this.state.manifest.PluginName 
-                    : this.props.pluginData.local_url
-            );
+        const pluginDescription = React.createElement(
+            'div',
+            {
+                key: this.props.pluginData.id + 'description',
+                className: 'pluginDescription'
+            },
+            this.state.manifest
+                ? this.state.manifest.PluginDescription 
+                : this.props.pluginData.description || 'No description'
+        );
 
-            const pluginDescription = React.createElement(
-                'div',
-                {
-                    key: this.props.pluginData.id + 'description',
-                    className: 'pluginDescription'
-                },
-                this.state.manifest
-                    ? this.state.manifest.PluginDescription 
-                    : 'No description found'
-            );
-
-            return React.createElement(
-                'li',
-                {
-                    className: ''
-                },
-                React.createElement(
-                    'div',
-                    {
-                        className: 'columns is-mobile'
-                    },
-                    [
-                        React.createElement(
-                            'div',
-                            {
-                                key: this.props.pluginData.id + 'col1',
-                                className: 'column'
-                            },
-                            [
-                                pluginName,
-                                pluginDescription
-                            ]
-                        ),
-                        React.createElement(
-                            'div',
-                            {
-                                key: this.props.pluginData.id + 'col2',
-                                className: 'column is-one-fifth'
-                            },
-                            ''//TODO?
-                        ),
-                        React.createElement(
-                            'div',
-                            {
-                                key: this.props.pluginData.id + 'col3',
-                                className: 'column is-one-fifth',
-                            },
-                            [
-                                pluginInstallButton
-                            ]
-                        )
-                    ]
-                )
-            );
-
-        }else{
-
-            const pluginName = React.createElement(
-                'div',
-                {
-                    key: this.props.id + 'name',
-                    className: 'pluginName'
-                },
-                this.state.manifest
-                    ? this.state.manifest.PluginName 
-                    : this.props.pluginData.name
-            );
-
-            const pluginDescription = React.createElement(
-                'div',
-                {
-                    key: this.props.pluginData.id + 'description',
-                    className: 'pluginDescription'
-                },
-                this.state.manifest
-                    ? this.state.manifest.PluginDescription 
-                    : this.props.pluginData.description
-            );
-
-            const pluginStars = React.createElement(
+        const pluginStars = this.props.pluginData.git_url
+            ? React.createElement(
                 'div',
                 {
                     key: this.props.pluginData.id + 'stars',
@@ -360,9 +291,11 @@ class PluginItem extends React.Component {
                         this.props.pluginData.stargazers_count
                     ),
                 ]
-            );
+            )
+            : null;
 
-            const authorInfo = React.createElement(
+        const authorInfo = this.props.pluginData.git_url 
+            ? React.createElement(
                 'div',
                 {
                     key: this.props.pluginData.id + 'authorContainer',
@@ -387,9 +320,11 @@ class PluginItem extends React.Component {
                         this.props.pluginData.owner.login
                     )
                 ]
-            );
+            )
+            : null;
 
-            const githubButton = React.createElement('a',
+        const githubButton = this.props.pluginData.git_url
+            ? React.createElement('a',
                 {
                     key: this.props.pluginData.id + 'githubbutton',
                     className:'githubButton',
@@ -401,80 +336,72 @@ class PluginItem extends React.Component {
                     title:'Visit github project'
                 },
                 React.createElement('i', {className:'fab fa-github fa-lg'}, '')
-            );
+            )
+            : null
 
-            return React.createElement(
-                'li',
-                {
-                    className: `${this.state.active ? 'active' : ''}`,
-                    onClick: this.handlePreviewClick.bind(this),
-                    onBlur: this.handleBlur.bind(this)
-                },
-                [
-                    React.createElement(
-                        'div',
-                        {
-                            className: 'columns is-mobile',
-                            key: 'columns'
-                        },
-                        [
-                            React.createElement(
-                                'div',
-                                {
-                                    key: this.props.pluginData.id + 'col1',
-                                    className: 'column'
-                                    
-                                },
-                                [
-                                    pluginStars,
-                                    pluginName,
-                                    pluginDescription,
-                                    authorInfo,
-                                ]
-                            ),
-                            React.createElement(
-                                'div',
-                                {
-                                    key: this.props.pluginData.id + 'col2',
-                                    className: 'column is-one-fifth'
-                                },
-                                githubButton
-                            ),
-                            React.createElement(
-                                'div',
-                                {
-                                    key: this.props.pluginData.id + 'col3',
-                                    className: 'column is-one-fifth'
-                                },
-                                [
-                                    pluginInstallButton
-                                ]
-                            )
-                        ]
-                    ),
-                    React.createElement(
-                        'div', 
-                        {
-                            ref: this.previewRef,
-                            tabIndex: -1,
-                            key: 'markdown',
-                            className: `preview`
-                        },
-                        [
-                            React.createElement(
-                                'div', 
-                                {
-                                    key: 'loading',
-                                    className: `${this.state.markdown ? '' : 'control is-loading'}`,
-                                    dangerouslySetInnerHTML: {__html: this.state.markdown,}
-                                },
-                                null
-                            )
-                        ]
-                    )
-                ]
-            );
-        }
+        return React.createElement(
+            'li',
+            {
+                className: `${this.state.active ? 'active' : ''} ${this.props.pluginData.isPromoted ? 'isPromoted': ''}`,
+                onClick: this.handlePreviewClick.bind(this),
+                onBlur: this.handleBlur.bind(this)
+            },
+            [
+                React.createElement(
+                    'div',
+                    {
+                        className: 'columns is-mobile',
+                        key: 'columns'
+                    },
+                    [
+                        React.createElement(
+                            'div',
+                            {
+                                key: this.props.pluginData.id + 'col1',
+                                className: 'column'
+                                
+                            },
+                            [
+                                pluginStars,
+                                pluginName,
+                                pluginDescription,
+                                authorInfo,
+                            ]
+                        ),
+                        React.createElement(
+                            'div',
+                            {
+                                key: this.props.pluginData.id + 'col2',
+                                className: 'column is-one-quarter pluginControls'
+                            },
+                            pluginInstallButton,
+                            githubButton,
+                            
+                        )
+                    ]
+                ),
+                React.createElement(
+                    'div', 
+                    {
+                        ref: this.previewRef,
+                        tabIndex: -1,
+                        key: 'markdown',
+                        className: `preview`
+                    },
+                    [
+                        React.createElement(
+                            'div', 
+                            {
+                                key: 'loading',
+                                className: `${this.state.markdown ? '' : 'control is-loading'}`,
+                                dangerouslySetInnerHTML: {__html: this.state.markdown,}
+                            },
+                            null
+                        )
+                    ]
+                )
+            ]
+        );
     }
 }
 

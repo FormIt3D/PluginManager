@@ -37,14 +37,14 @@
 h1{
     font-size: 20px !important;
     font-family: Arial !important;
-    color: grey !important;
+    color: gray !important;
     font-weight: bold !important;
     margin-bottom: 0 !important;
     padding: 10px !important;
 }
 
 ul li {
-    padding:5px;
+    padding:5px 10px 5px 12px;
 }
 
 li .field {
@@ -53,7 +53,7 @@ li .field {
 
 .pluginName{
     font-weight:bold;
-    width: 160px;
+    width: 220px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -61,7 +61,7 @@ li .field {
 
 .pluginDescription{
     font-size:12px;
-    width: 160px;
+    width: 240px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -69,6 +69,7 @@ li .field {
 
 .githubButton{
     margin-top: 8px;
+    margin-right: 10px;
     display: inline-block;
 }
 
@@ -108,12 +109,12 @@ li .field {
     margin-right: 3px;
 }
 
-.is-approved.fa-star{
+.isPromoted .fa-star{
     color:gold;
 }
 
 .pluginList + .pluginList{
-    border-top: solid 1px grey;
+    border-top: solid 1px black;
 }
 
 .pluginList.open ul{
@@ -147,6 +148,9 @@ li .field {
     transform: scale(.8);
     transform-origin: top;
     outline:none;
+    cursor:default;
+    max-height:300px;
+    overflow-y: scroll;
 }
 
 .pluginList li .control.is-loading{
@@ -167,6 +171,15 @@ li .field {
     padding-bottom: 0px;
 }
 
+.pluginList li .pluginControls{
+    padding: 11px 2px 0 0;
+}
+
+.pluginList li .pluginControls .githubButton,
+.pluginList li .pluginControls .field{
+    float:right;
+}
+
 .groupHeader{
     cursor:pointer;
     margin-left:5px;
@@ -184,7 +197,16 @@ li .field {
     width: 20px;
     height: 20px;
     position: absolute;
-    right: 2px;
+    right: 10px;
     text-align: center;
     top: 2px;
 }
+
+.preview h1{
+    padding: 0 !important;
+}
+
+.preview img{
+    border: solid 1px gray;
+}
+

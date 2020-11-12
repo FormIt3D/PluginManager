@@ -14,7 +14,6 @@ class InstallPluginControls extends React.Component {
             className: 'input',
             type: 'text',
             placeholder: 'Add Plugin URL',
-            defaultValue: '',
             value: this.state.installUrl || '',
             onChange: (e) => {
                 const value = e.target.value;
