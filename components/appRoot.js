@@ -2,6 +2,7 @@
 
 import PluginList from "./pluginList.js";
 import InstallPluginControls from "./installPluginControls.js";
+import PluginBadge from "./pluginBadge.js";
 import approvedPlugins from "./../approvedPlugins.js";
 import promotedPlugins from "./../promotedPlugins.js";
 
