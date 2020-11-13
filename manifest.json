@@ -1,7 +1,6 @@
 {
     "PluginName": "Plugin Manager",
     "PluginDescription": "Discover and manage plugins.",
-    "Scripts": [],
     "Panel": "PLUGINLOCATION/index.html",
     "PanelIcon": "PLUGINLOCATION/img/plugin_manager.png"
 }
