@@ -45,7 +45,7 @@ class PluginList extends React.Component {
                             'span',
                             {
                                 className:'pluginGroupName',
-                                key:'name'
+                                key:'groupName'
                             },
                             this.props.pluginGroup
                         ),
@@ -54,7 +54,7 @@ class PluginList extends React.Component {
                             'span',
                             {
                                 className:'groupDescription',
-                                key:'name'
+                                key:'groupDescription'
                             },
                             this.props.groupDescription
                         )
