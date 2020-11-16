@@ -84,7 +84,7 @@ class AppRoot extends React.Component {
             const sortFunc = (a,b) => {
                 //first sort by isPromoted, if same sort by next || 
                 return Number(b.isPromoted) - Number(a.isPromoted)
-                    || a.stargazers_count - b.stargazers_count 
+                    || b.stargazers_count - a.stargazers_count
                     || a.name.localeCompare(b.name);
             }
 
