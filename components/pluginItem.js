@@ -339,7 +339,7 @@ class PluginItem extends React.Component {
                     key: this.props.pluginData.id + 'githubbutton',
                     className:'githubButton',
                     onClick: (e) => {
-                        FormIt.OpenURL(this.props.pluginData.html_url);
+                        FormItInterface.CallMethod("FormIt.OpenURL", this.props.pluginData.html_url);
                         e.stopPropagation();
                         e.preventDefault();
                     },
