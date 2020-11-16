@@ -8,7 +8,7 @@ const approvedPlugins = [
     "https://github.com/FormIt3D/StringLightGenerator",
     "https://github.com/FormIt3D/PropertiesPlus",
     //"https://github.com/FormIt3D/MoveAllSceneCameras",
-    "https://github.com/FormIt3D/ManageCameras"
+    "https://github.com/FormIt3D/ManageCameras",
     //"https://github.com/FormIt3D/ModelessDialog",
     //"https://github.com/FormIt3D/ModalDialog",
     //"https://github.com/FormIt3D/Messages",
