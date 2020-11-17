@@ -16,14 +16,28 @@
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-switch@2.0.0/dist/css/bulma-switch.min.css">
-    
+    <style>
+        html{
+            overflow: hidden;
+        }
+    </style>
 </head>
 <body>
-    <a class='pluginBadge' target="_blank" href="https://formit3d.github.io/FormItExamplePlugins/index.html" title='Learn more about FormIt Plugins'>
+    <div id='PluginContainer'>
+        <h1 class='title'>Plugin Manager</h1>
+        <div id ="Root"></div>
+    </div>
+    <div id='PluginFooter'>
         <i class="fas fa-plug"></i>
-    </a>
-    <h1 class='title'>Plugin Manager</h1>
-    <div id ="Root">
+        <p>Powered by FormIt JavaScript plugins</p>
+        <ul>
+            <li>
+                <a id='LearnMoreLink' href="javascript:void(0);">Learn about plugins</a>
+            </li>
+            <li>
+                <a id='BuildLink' href="javascript:void(0);">Build your own</a>
+            </li>
+        </ul>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> 
     <script type="module" src="index.js"></script>

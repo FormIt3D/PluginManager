@@ -195,13 +195,14 @@ class AppRoot extends React.Component {
                         toggleInstallPlugin: this.toggleInstallPlugin.bind(this),
                         key:'Public'
                     }, null),
-                    React.createElement(PluginList, {
+                    //TODO, no hard strategy here yet.
+                    /*React.createElement(PluginList, {
                         pluginGroup: 'Needs approval',
                         groupDescription: 'Admin only',
                         plugins:this.state.plugins.needsApprovalPlugins,
                         toggleInstallPlugin: this.toggleInstallPlugin.bind(this),
                         key:'Needsapproval'
-                    }, null),
+                    }, null),*/
                     React.createElement(InstallPluginControls, {
                         addPlugin: this.addPlugin.bind(this),
                         key:'AddPlugin'
