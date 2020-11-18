@@ -354,7 +354,8 @@ class PluginItem extends React.Component {
             {
                 className: `${this.state.active ? 'active' : ''} ${this.props.pluginData.isPromoted ? 'isPromoted': ''}`,
                 onClick: this.handlePreviewClick.bind(this),
-                onBlur: this.handleBlur.bind(this)
+                onBlur: this.handleBlur.bind(this),
+                //key: `plugin-${this.props.pluginData.id}`
             },
             [
                 React.createElement(

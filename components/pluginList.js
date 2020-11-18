@@ -13,11 +13,16 @@ class PluginList extends React.Component {
     render(){
         const pluginList = this.props.plugins.map((pluginData, i) => {
             return React.createElement(PluginItem, {
-                key: 'plugin' + i,
+                key: `pluginItem-${this.props.pluginGroup}-${pluginData ? pluginData.id : i}`,
                 pluginData,
                 toggleInstallPlugin: this.props.toggleInstallPlugin
             }, null);
         });
+
+        /*if (this.props.pluginGroup === "Installed"){
+            console.log(this.props.pluginGroup, this.props.plugins)
+            console.log(pluginList)
+        }*/
 
         return React.createElement(
             'div',

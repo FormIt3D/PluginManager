@@ -75,7 +75,7 @@ class AppRoot extends React.Component {
                 //Also check if the plugin is a recommended plugin.
                 plugin.isPromoted = promotedPlugins.indexOf(plugin.html_url) > -1;
 
-                //Hacky, a better way to do this? Not thinking clearly.
+                //TODO hacky, a better way to do this? Not thinking clearly
                 installedPlugins[installedIndex] = plugin;
 
                 return plugin;
