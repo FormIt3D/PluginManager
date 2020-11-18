@@ -91,7 +91,7 @@ li .field {
 
 .pluginName{
     font-weight:bold;
-    width: 220px;
+    width: 190px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -99,7 +99,7 @@ li .field {
 
 .pluginDescription{
     font-size:12px;
-    width: 260px;
+    width: 230px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

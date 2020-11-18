@@ -5,9 +5,10 @@ class Main{
         const domContainer = document.getElementById('Root');
         const appRoot = React.createElement(AppRoot, {
         }, null);
-
-        this.migratePlugins(() => {
-            ReactDOM.render(appRoot, domContainer);
+        FormItInterface.Initialize(() => {
+            this.migratePlugins(() => {
+                ReactDOM.render(appRoot, domContainer);
+            });
         });
 
         document.getElementById('LearnMoreLink').addEventListener('click', () => {
@@ -44,9 +45,7 @@ class Main{
 
             const migrationPromises = [];
 
-            console.log(1)
             installedPlugins.forEach((installedPluginPath) => {
-
                 const migrationPath = migrationMap[installedPluginPath]
 
                 if (migrationPath){
@@ -62,13 +61,16 @@ class Main{
                     migrationPromises.push(migratePromise);  
                 }
 
-                Promise.all(migrationPromises).then(() => {
+                if(migrationPromises.length){
+                    Promise.all(migrationPromises).then(() => {
+                        callback();
+                        localStorage.setItem('hasMigrated', 'true');
+                    });
+                }else{
                     callback();
-                });
+                }
             });
         });
-
-        localStorage.setItem('hasMigrated', 'true');
     }
 }
 
