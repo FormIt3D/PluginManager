@@ -45,31 +45,35 @@ class Main{
 
             const migrationPromises = [];
 
-            installedPlugins.forEach((installedPluginPath) => {
-                const migrationPath = migrationMap[installedPluginPath]
+            if (installedPlugins.length){
+                installedPlugins.forEach((installedPluginPath) => {
+                    const migrationPath = migrationMap[installedPluginPath]
 
-                if (migrationPath){
-                    const migratePromise = new Promise((resolve,reject) => {
-                        console.log('in promise')
-                        FormItInterface.CallMethod("FormIt.UninstallPlugin", installedPluginPath, () => {
-                            FormItInterface.CallMethod("FormIt.InstallPlugin", migrationPath, () => {
-                                resolve();
-                            });   
+                    if (migrationPath){
+                        const migratePromise = new Promise((resolve,reject) => {
+                            console.log('in promise')
+                            FormItInterface.CallMethod("FormIt.UninstallPlugin", installedPluginPath, () => {
+                                FormItInterface.CallMethod("FormIt.InstallPlugin", migrationPath, () => {
+                                    resolve();
+                                });   
+                            });
                         });
-                    });
 
-                    migrationPromises.push(migratePromise);  
-                }
+                        migrationPromises.push(migratePromise);  
+                    }
 
-                if(migrationPromises.length){
-                    Promise.all(migrationPromises).then(() => {
+                    if(migrationPromises.length){
+                        Promise.all(migrationPromises).then(() => {
+                            callback();
+                            localStorage.setItem('hasMigrated', 'true');
+                        });
+                    }else{
                         callback();
-                        localStorage.setItem('hasMigrated', 'true');
-                    });
-                }else{
-                    callback();
-                }
-            });
+                    }
+                });
+            }else{
+                callback();
+            }
         });
     }
 }
