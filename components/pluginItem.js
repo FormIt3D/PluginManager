@@ -203,7 +203,7 @@ class PluginItem extends React.Component {
             catch(e){
                 console.log(e)
                 this.setState({
-                    markdown: `Unable to show preview.` //TODO just use git metadata?
+                    markdown: `This plugin repo does not have a README.md to display.` //TODO just use git metadata?
                 });
             }
         }
