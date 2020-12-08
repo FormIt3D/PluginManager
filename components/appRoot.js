@@ -182,7 +182,7 @@ class AppRoot extends React.Component {
                     }, null),
                     React.createElement(PluginList, {
                         pluginGroup: 'Recommended',
-                        groupDescription: 'plugins suggsested by FormIt team',
+                        groupDescription: 'plugins suggested by the FormIt team',
                         isOpen: true,
                         plugins:this.state.plugins.recommendedPlugins,
                         toggleInstallPlugin: this.toggleInstallPlugin.bind(this),
