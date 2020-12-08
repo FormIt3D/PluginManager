@@ -30,7 +30,7 @@ class Main{
         const migrationMap = {
             "https://formit3d.github.io/FormItWorkflowPlugins/RebuildCurve": "https://FormIt3D.github.io/RebuildCurve",
             "https://formit3d.github.io/FormItWorkflowPlugins/ValidateCleanModel": "https://FormIt3D.github.io/ValidateCleanModel",
-            "https://formit3d.github.io/FormItWorkflowPlugins/StringLightGenerator": "https://FormIt3D.github.io/StringLightGenerator",
+            "https://formit3d.github.io/FormItWorkflowPlugins/StringLightGenerator": "https://FormIt3D.github.io/GenerateStringLights",
             "https://formit3d.github.io/FormItWorkflowPlugins/PropertiesPlus": "https://FormIt3D.github.io/PropertiesPlus",
             "https://formit3d.github.io/FormItWorkflowPlugins/ManageCameras": "https://FormIt3D.github.io/ManageCameras",
             "https://formit3d.github.io/FormItWorkflowPlugins/GenerateVertex": "https://FormIt3D.github.io/GenerateVertex",
