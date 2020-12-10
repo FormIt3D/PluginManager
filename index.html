@@ -4,11 +4,15 @@
     <META NAME="Title" CONTENT="Plugin Manager">
     <META NAME="Author" CONTENT="Autodesk FormIt">
     <link rel="stylesheet" type="text/css" href="stylesheet.css"/>
+
+    <!-- for testing shared files locally, use: ../../FormItExamplePlugins/SharedPluginFiles -->
+    <script type="text/javascript" src="https://formit3d.github.io/FormItExamplePlugins/SharedPluginFiles/FormItPluginUI.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://formit3d.github.io/FormItExamplePlugins/SharedPluginFiles/FormItPluginStyling.css">
     <script type="text/javascript" src="https://formit3d.github.io/FormItExamplePlugins/SharedPluginFiles/FormIt.js"></script>
     <script type="text/javascript" src="https://formit3d.github.io/FormItExamplePlugins/SharedPluginFiles/FormItInterface.js"></script>
     <script type="text/javascript" src="https://formit3d.github.io/FormItExamplePlugins/SharedPluginFiles/PluginUtils.js"></script>
-    <script src="https://kit.fontawesome.com/c35c0bb2dc.js" crossorigin="anonymous"></script>
 
+    <script src="https://kit.fontawesome.com/c35c0bb2dc.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
@@ -24,18 +28,10 @@
         <h1 class='title'>Plugin Manager</h1>
         <div id ="Root"></div>
     </div>
-    <div id='PluginFooter'>
-        <i class="fas fa-plug"></i>
-        <p>Powered by FormIt JavaScript plugins</p>
-        <ul>
-            <li>
-                <a id='LearnMoreLink' href="javascript:void(0);">Learn about plugins</a>
-            </li>
-            <li>
-                <a id='BuildLink' href="javascript:void(0);">Build your own</a>
-            </li>
-        </ul>
-    </div>
+    <script>
+            var footerModule = new FormIt.PluginUI.FooterModule;
+            window.document.body.appendChild(footerModule.element);
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> 
     <script type="module" src="index.js"></script>
 </body>

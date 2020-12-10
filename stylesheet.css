@@ -2,37 +2,13 @@ body{
     display:flex;
     flex-direction: column;
     height:100%;
+    user-select: none;
 }
 
 #PluginContainer{
     flex:1;
     overflow-y:scroll;
     overflow-x:hidden;
-}
-
-#PluginFooter{
-    background-color: aliceblue;
-    padding: 10px;
-    font-size: 14px;
-    border-top:solid 1px royalblue;
-}
-
-#PluginFooter p{
-    color: #23d160;
-    font-weight:bold;
-}
-
-#PluginFooter .fa-plug{
-    font-size: 40px;
-    color: #23d160;
-    float: left;
-    margin: 10px;
-    margin-right: 20px;
-}
-
-#PluginFooter li {
-    padding:0;
-    margin-right:20px;
 }
 
 #MainLoader.control.is-loading{
@@ -51,7 +27,6 @@ body{
 }
 
 #InstallPluginControls{
-    border-top:solid 1px gray;
     margin-bottom:10px;
     padding:10px;
     position: relative;
@@ -78,11 +53,15 @@ h1{
     color: gray !important;
     font-weight: bold !important;
     margin-bottom: 0 !important;
-    padding: 10px !important;
+    padding: 0px 10px 10px 10px !important;
 }
 
-ul li {
-    padding:5px 10px 5px 12px;
+li {
+    list-style-type: none;
+}
+
+#PluginContainer ul li {
+    padding: 5px 10px 5px 12px;
 }
 
 li .field {
@@ -91,7 +70,6 @@ li .field {
 
 .pluginName{
     font-weight:bold;
-    width: 190px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -99,7 +77,6 @@ li .field {
 
 .pluginDescription{
     font-size:12px;
-    width: 230px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -150,10 +127,6 @@ li .field {
     color:gold;
 }
 
-.pluginList + .pluginList{
-    border-top: solid 1px black;
-}
-
 .pluginList.open ul{
     display:block;
 }
@@ -169,7 +142,7 @@ li .field {
 }
 
 .pluginList li:hover{
-    background-color:aliceblue;
+    background-color: #DBF6FF;
 }
 
 .pluginList li .preview{
@@ -208,6 +181,11 @@ li .field {
     padding-bottom: 0px;
 }
 
+.columns {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
 .pluginList li .pluginControls{
     padding: 11px 2px 0 0;
 }
@@ -227,10 +205,31 @@ li .field {
     padding-left:10px 0 0 0;
 }
 
+#pluginRow {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
 .groupHeader{
     cursor:pointer;
-    margin-left:5px;
     position:relative;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    margin: 10px;
+    background-color: hsl(0, 0%, 95%);
+}
+
+.groupHeader:hover {
+    background-color: #DBF6FF;
+}
+
+.groupHeader.open {
+    background-color: #ebfaff
+}
+
+.groupHeader:active {
+    background-color: #ebfaff
 }
 
 .groupHeader i{
@@ -244,15 +243,20 @@ li .field {
 }
 
 .groupHeader .count{
-    background-color: aliceblue;
-    border-radius: 10px;
+    background-color: white;
+    border: 1px solid #4676a9;
     font-size: 12px;
-    width: 20px;
-    height: 20px;
+    font-weight: 600;
+    color: grey;
+    border-radius: 20px;
+    width: 25px;
+    height: 25px;
     position: absolute;
     right: 10px;
     text-align: center;
     top: 2px;
+    margin-top: 9px;
+    padding-top: 3px;
 }
 
 .preview h1{
@@ -261,25 +265,6 @@ li .field {
 
 .preview img{
     border: solid 1px gray;
-}
-
-.pluginBadge {
-    position: absolute;
-    top: -30px;
-    left: -30px;
-    width: 60px;
-    height: 60px;
-    transform: rotate(45deg);
-    background: #23d160;
-}
-
-.pluginBadge .fa-plug{
-    transform: rotate(-45deg);
-    color: white;
-    position: absolute;
-    top: 21px;
-    font-size: 18px;
-    right: 5px;
 }
 
 .pluginBadge + h1 {

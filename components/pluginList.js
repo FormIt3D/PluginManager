@@ -78,6 +78,7 @@ class PluginList extends React.Component {
                     'ul',
                     {
                         className: '',
+                        id: 'pluginRow',
                         key:'list'
                     },
                     pluginList
