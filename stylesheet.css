@@ -11,6 +11,11 @@ body{
     overflow-x:hidden;
 }
 
+/* the accent color of the install switch */
+#PluginContainer .switch[type=checkbox].is-success:checked+label::before, .switch[type=checkbox].is-success:checked+label:before {
+    background: #77d0ec;
+}
+
 #MainLoader.control.is-loading{
     width: 66%;
     font-size:4rem;
@@ -42,6 +47,7 @@ body{
 }
 
 #InstallPluginControls a{
+    color: #4676a9;
     position: absolute;
     top:33px;
     right:10px;
@@ -85,10 +91,6 @@ li .field {
 .githubButton{
     margin-right: 10px;
     display: inline-block;
-}
-
-.authorContainer{
-
 }
 
 .authorContainer img{
@@ -142,7 +144,7 @@ li .field {
 }
 
 .pluginList li:hover{
-    background-color: #DBF6FF;
+    background-color: #edf8fc;
 }
 
 .pluginList li .preview{
@@ -221,7 +223,7 @@ li .field {
 }
 
 .groupHeader:hover {
-    background-color: #DBF6FF;
+    background-color: #edf8fc;
 }
 
 .groupHeader.open {
