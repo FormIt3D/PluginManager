@@ -56,7 +56,7 @@ class PluginList extends React.Component {
                         ),
                         this.props.groupDescription
                         ? React.createElement(
-                            'span',
+                            'div',
                             {
                                 className:'groupDescription',
                                 key:'groupDescription'
