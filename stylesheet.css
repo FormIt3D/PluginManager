@@ -177,6 +177,7 @@ li .field {
 
 .pluginList li .columns{
     margin-bottom:0px;
+    width:100%;
 }
 
 .pluginList li .column{
@@ -198,8 +199,10 @@ li .field {
 }
 
 .pluginList li .pluginIcon{
+    padding-left:0px;
     padding-right:0px;
     max-width: 40px;
+    min-width: 40px;
     margin-top: 16px;
 }
 
@@ -271,4 +274,8 @@ li .field {
 
 .pluginBadge + h1 {
     margin-left:25px;
+}
+
+.formItPluginsDescription{
+    float:right;
 }

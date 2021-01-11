@@ -33,6 +33,8 @@ class AppRoot extends React.Component {
                 q: 'topic:formit-plugin-recommended'//&sort=stars&order=desc',
             });
 
+            console.log(recommendedPluginsResult)
+
             const publicPlugins = publicPluginsResult.data.items.filter((repo) => {
                 return repo.has_pages;
             });
@@ -44,6 +46,8 @@ class AppRoot extends React.Component {
 
                 return hasPages && isApproved;
             });
+
+            console.log(recommendedPlugins)
 
             const needsApprovalPlugins = recommendedPluginsResult.data.items.filter((repo) => {
                 const hasPages = repo.has_pages;
