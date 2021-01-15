@@ -10,14 +10,6 @@ class Main{
                 ReactDOM.render(appRoot, domContainer);
             });
         });
-
-        document.getElementById('LearnMoreLink').addEventListener('click', () => {
-            FormItInterface.CallMethod("FormIt.OpenURL", 'https://formit3d.github.io/FormItExamplePlugins/index.html');
-        });
-
-        document.getElementById('BuildLink').addEventListener('click', () => {
-            FormItInterface.CallMethod("FormIt.OpenURL", 'https://formit3d.github.io/FormItExamplePlugins/docs/HowToBuild.html');
-        });
     }
 
     //This migrates plugins from their previous git structure so clients stay in sync with latest plugin.
