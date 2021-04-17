@@ -1,6 +1,7 @@
 const approvedPlugins = [
     "https://github.com/FormIt3D/PluginPlayground",
     //"https://github.com/FormIt3D/DialogFromToolbar",
+    "https://github.com/FormIt3D/DynamoEyedropper",
     "https://github.com/FormIt3D/RandomRotateScale",
     "https://github.com/FormIt3D/RebuildCurve",
     "https://github.com/FormIt3D/ValidateCleanModel",
