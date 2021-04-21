@@ -114,27 +114,93 @@ class PluginItem extends React.Component {
     }
 
     async fetchManifest(){
-        try{
-            const url = this.props.pluginData.git_url 
+
+        try {
+            // first, try to get manifest.json at the root folder
+            let manifestURL = (this.props.pluginData.git_url) 
                 ? `https://${this.props.pluginData.owner.login}.github.io/${this.props.pluginData.name}/manifest.json`
                 : `${this.props.pluginData.local_url}/manifest.json`;
 
-            const resultObj = await fetch(url);
+            const pluginName = (this.props.pluginData.git_url) 
+            ? `${this.props.pluginData.name}`
+            : `${this.props.pluginData.local_url}`;
 
-            if (!resultObj.ok) {
-                throw Error(resultObj.statusText);
+            let manifestObject = await fetch(manifestURL);
+
+            // if we couldn't find it at the root, use versions.json to get the versioned path
+            if (!manifestObject.ok) {
+
+                console.log("No manifest.json found at the root directory for " + pluginName + ", looking for a versioned subfolder instead...");
+
+                // try to get versions.json
+                const versionsURL = (this.props.pluginData.git_url) 
+                ? `https://${this.props.pluginData.owner.login}.github.io/${this.props.pluginData.name}/versions.json`
+                : `${this.props.pluginData.local_url}/versions.json`;
+
+                const versionsObject = await fetch(versionsURL);
+
+                if (!versionsObject.ok) {
+
+                    // we couldn't find  versions.json
+                    throw Error("No versions.json found. " + versionsObject.statusText);
+
+                }
+ 
+                // get the versions JSON from the object
+                const versionsJSON = await versionsObject.json();
+
+                // the subpath that needs to be accessed from the plugin root dir, depending on the client version
+                let versionPath = '';
+                
+                // get the current FormIt client version
+                const clientVersionData = await FormIt.Version();
+                const clientVersionMajor = clientVersionData["internalMajor"];
+                const clientVersionMinor = clientVersionData["internalMinor"]
+
+                // versions.json may have multiple versions specified; find the one compatible with this version of FormIt
+                for (let i = 0; i < versionsJSON.length; i++)
+                {
+                    if ((clientVersionMajor >= versionsJSON[i]["version"]["major"]) && (clientVersionMinor >= versionsJSON[i]["version"]["minor"]))
+                    {
+                        versionPath = versionsJSON[i]["path"];
+                    }
+                }
+
+                // did we get a version path from versions.json?
+                if (versionPath === '') {
+
+                    // no valid version path
+                    throw Error("No valid path found in versions.json. " + manifestObject.statusText);
+                }
+
+                const versionedURL = (this.props.pluginData.git_url) 
+                ? `https://${this.props.pluginData.owner.login}.github.io/${this.props.pluginData.name}/${versionPath}/manifest.json`
+                : `${this.props.pluginData.local_url}/${versionPath}/manifest.json`;
+
+                manifestObject = await fetch(versionedURL);
+                manifestURL = versionedURL;
+
+                if (!manifestObject.ok) {
+
+                    // we still couldn't find manifest.json
+                    throw Error("No manifest.json found in the version subfolder, either. " + manifestObject.statusText);
+                }
+
             }
 
-            const manifestJSON = await resultObj.json();
+            const manifestJSON = await manifestObject.json();
 
             this.setState({
                 manifest: manifestJSON
             });
 
-            if (manifestJSON && manifestJSON.PanelIcon){
-                const iconUrl = this.props.pluginData.git_url 
-                    ? `https://${this.props.pluginData.owner.login}.github.io/${this.props.pluginData.name}/${manifestJSON.PanelIcon.replace('PLUGINLOCATION', '')}`
-                    : `${this.props.pluginData.local_url}/${manifestJSON.PanelIcon.replace('PLUGINLOCATION', '')}`;
+            // set the icon
+            if (manifestJSON && manifestJSON.PanelIcon) {
+
+                // the PLUGINLOCATION specified in the manifest is the same as the dir where the manifest is
+                const pluginLocation = manifestURL.replace('/manifest.json', '');
+
+                const iconUrl = `${manifestJSON.PanelIcon.replace('PLUGINLOCATION', pluginLocation)}`;
 
                 this.setState({iconUrl})
             }
