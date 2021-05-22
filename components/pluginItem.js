@@ -102,7 +102,8 @@ class PluginItem extends React.Component {
         this.state = {
             active: false,
             //isInstalled : this.props.pluginData.isInstalled
-            iconUrl: ''
+            iconUrl: '',
+            showOnThisPlatform: true
         };
 
         this.previewRef = React.createRef();
@@ -185,10 +186,30 @@ class PluginItem extends React.Component {
                     // we still couldn't find manifest.json
                     throw Error("No manifest.json found in the version subfolder, either. " + manifestObject.statusText);
                 }
-
             }
 
             const manifestJSON = await manifestObject.json();
+
+            if (manifestJSON.hasOwnProperty('Platforms'))
+            {
+                let currentPlatform = FormItInterface.Platform;
+
+                if (manifestJSON.Platforms.includes(currentPlatform))
+                {
+                    this.setState({
+                        showOnThisPlatform: true
+                    });
+                }
+                else                
+                {
+                    this.setState({
+                        showOnThisPlatform: false
+                    });
+                    return;
+                }
+            }
+
+            this.props.addToGroupTotal();
 
             this.setState({
                 manifest: manifestJSON
@@ -280,6 +301,10 @@ class PluginItem extends React.Component {
     }
 
     render(){
+        if (!this.state.showOnThisPlatform)
+        {
+            return null;
+        }
 
         const pluginInstallButton = React.createElement(
             'div',
