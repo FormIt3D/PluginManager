@@ -156,14 +156,23 @@ class PluginItem extends React.Component {
                 // get the current FormIt client version
                 const clientVersionData = await FormIt.Version();
                 const clientVersionMajor = clientVersionData["internalMajor"];
-                const clientVersionMinor = clientVersionData["internalMinor"]
+                const clientVersionMinor = clientVersionData["internalMinor"];
+
+                // if the plugin is versioned, that client version is the minimum required to run the plugin
+                let pluginMinimumVersionMajor = 0;
+                let pluginMinimumVersionMinor = 0;
 
                 // versions.json may have multiple versions specified; find the one compatible with this version of FormIt
                 for (let i = 0; i < versionsJSON.length; i++)
                 {
-                    if ((clientVersionMajor >= versionsJSON[i]["version"]["major"]) && (clientVersionMinor >= versionsJSON[i]["version"]["minor"]))
+                    if ((clientVersionMajor >= versionsJSON[i]["version"]["major"]) && 
+                    (clientVersionMinor >= versionsJSON[i]["version"]["minor"]) && 
+                    ((versionsJSON[i]["version"]["major"] >= pluginMinimumVersionMajor) && 
+                    (versionsJSON[i]["version"]["minor"] >= pluginMinimumVersionMinor)))
                     {
                         versionPath = versionsJSON[i]["path"];
+                        pluginMinimumVersionMajor = versionsJSON[i]["version"]["major"];
+                        pluginMinimumVersionMinor = versionsJSON[i]["version"]["minor"];
                     }
                 }
 
