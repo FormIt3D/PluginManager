@@ -6,7 +6,7 @@ import PluginBadge from "./pluginBadge.js";
 import approvedPlugins from "./../approvedPlugins.js";
 import promotedPlugins from "./../promotedPlugins.js";
 
-import { Octokit } from "https://cdn.skypack.dev/@octokit/rest";
+import { Octokit } from "https://cdn.skypack.dev/@octokit/rest@18.5.4";
 
 class AppRoot extends React.Component {
     constructor(props) {
