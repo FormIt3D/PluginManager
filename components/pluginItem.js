@@ -96,6 +96,17 @@ url: "https://api.github.com/repos/mattributes/hello-world"
 watchers: 0
 watchers_count: 0*/
 
+let showVerbosePluginItemConsoleMessages = false;
+
+// wrapper for console.log to toggle additional pluginItem console messages
+let pluginItemConsoleLog = function(consoleMessage)
+{
+    if (showVerbosePluginItemConsoleMessages)
+    {
+        console.log(consoleMessage);
+    }
+}
+
 class PluginItem extends React.Component {
     constructor(props) {
         super(props);
@@ -126,12 +137,14 @@ class PluginItem extends React.Component {
             ? `${this.props.pluginData.name}`
             : `${this.props.pluginData.local_url}`;
 
+            // this may throw a 404 if the plugin's manifest is not at the root
+            // this is a valid configuration - the plugin may be versioned and its versions may exclusively live in subfolders
             let manifestObject = await fetch(manifestURL);
 
             // if we couldn't find it at the root, use versions.json to get the versioned path
             if (!manifestObject.ok) {
 
-                console.log("No manifest.json found at the root directory for " + pluginName + ", looking for a versioned subfolder instead...");
+                pluginItemConsoleLog("No manifest.json found at the root of " + pluginName + " plugin, looking for a versioned subdir instead...");
 
                 // try to get versions.json
                 const versionsURL = (this.props.pluginData.git_url) 
@@ -142,9 +155,8 @@ class PluginItem extends React.Component {
 
                 if (!versionsObject.ok) {
 
-                    // we couldn't find  versions.json
-                    throw Error("No versions.json found. " + versionsObject.statusText);
-
+                    // we couldn't find versions.json
+                    throw Error("No versions.json found.");
                 }
  
                 // get the versions JSON from the object
@@ -180,8 +192,10 @@ class PluginItem extends React.Component {
                 if (versionPath === '') {
 
                     // no valid version path
-                    throw Error("No valid path found in versions.json. " + manifestObject.statusText);
+                    throw Error("No valid path found in versions.json.");
                 }
+
+                pluginItemConsoleLog("Adding to plugin list: " + this.props.pluginData.name + " for FormIt version " + pluginMinimumVersionMajor + "." + pluginMinimumVersionMinor + " or newer.");
 
                 const versionedURL = (this.props.pluginData.git_url) 
                 ? `https://${this.props.pluginData.owner.login}.github.io/${this.props.pluginData.name}/${versionPath}/manifest.json`
@@ -195,6 +209,10 @@ class PluginItem extends React.Component {
                     // we still couldn't find manifest.json
                     throw Error("No manifest.json found in the version subfolder, either. " + manifestObject.statusText);
                 }
+            }
+            else
+            {
+                pluginItemConsoleLog("Adding to plugin list: " + this.props.pluginData.name + " for any FormIt version.");
             }
 
             const manifestJSON = await manifestObject.json();
@@ -236,7 +254,7 @@ class PluginItem extends React.Component {
             }
             
         }catch(e){
-            console.log('Could not fetch manifest for', this.props.pluginData, e);
+            console.log('Could not fetch manifest for', this.props.pluginData.name, e);
         }
     }
 
@@ -258,6 +276,7 @@ class PluginItem extends React.Component {
         }
     }
 
+    /*
     handleBlur(){
         this.setState({
             active:false,
@@ -269,44 +288,50 @@ class PluginItem extends React.Component {
         setTimeout(() => {
             this.canOpen = true;
         }, 500);
+        
     }
+    */
 
-    async handlePreviewClick(){
-        if (!this.canOpen){
-            return;
-        }
-
-        if (!this.state.markdown){
-            try{
-                //For now, going to make a "guess" at github pages url
-                const url = this.props.pluginData.git_url 
-                    ? `https://${this.props.pluginData.owner.login}.github.io/${this.props.pluginData.name}/README.md`
-                    : `${this.props.pluginData.local_url}/README.md`;
-
-                //const url = `https://raw.githubusercontent.com/${this.props.pluginData.full_name}/main/README.md`
-                const resultObj = await fetch(url);
-
-                if (!resultObj.ok) {
-                    throw Error(resultObj.statusText);
+    async handlePreviewClick() {
+        if (!this.state.active)
+        {
+            if (!this.state.markdown){
+                try{
+                    //For now, going to make a "guess" at github pages url
+                    const url = this.props.pluginData.git_url 
+                        ? `https://${this.props.pluginData.owner.login}.github.io/${this.props.pluginData.name}/README.md`
+                        : `${this.props.pluginData.local_url}/README.md`;
+    
+                    //const url = `https://raw.githubusercontent.com/${this.props.pluginData.full_name}/main/README.md`
+                    const resultObj = await fetch(url);
+    
+                    if (!resultObj.ok) {
+                        throw Error(resultObj.statusText);
+                    }
+    
+                    const data = await resultObj.text();
+    
+                    this.setState({
+                        markdown: marked(data)
+                    });
                 }
-
-                const data = await resultObj.text();
-
-                this.setState({
-                    markdown: marked(data)
-                });
+                catch(e){
+                    console.log(e)
+                    this.setState({
+                        markdown: `This plugin repo does not have a README.md to display.` //TODO just use git metadata?
+                    });
+                }
             }
-            catch(e){
-                console.log(e)
-                this.setState({
-                    markdown: `This plugin repo does not have a README.md to display.` //TODO just use git metadata?
-                });
-            }
+
+            this.setState({
+                active:true
+            });
         }
-
-        this.setState({
-            active:true
-        });
+        else {
+            this.setState({
+                active:false
+            });
+        }
     }
 
     render(){
@@ -373,7 +398,7 @@ class PluginItem extends React.Component {
             },
             this.state.manifest
                 ? this.state.manifest.PluginDescription 
-                : this.props.pluginData.description || 'No description'
+                : this.props.pluginData.description || 'No description provided.'
         );
 
         const pluginStars = this.props.pluginData.git_url
@@ -433,6 +458,21 @@ class PluginItem extends React.Component {
             )
             : null;
 
+        // the "see more" link that reveals the preview
+        const seeMore = React.createElement(
+            'a',
+            {
+                key: this.props.id + 'SeeMoreHyperlink',
+                className: 'pluginSeeMoreContainer',
+                onClick: (e) => {
+                    FormItInterface.CallMethod("FormIt.OpenURL", this.props.pluginData.html_url);
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+            },
+                'See More'
+        );
+
         const githubButton = this.props.pluginData.git_url
             ? React.createElement('a',
                 {
@@ -449,19 +489,22 @@ class PluginItem extends React.Component {
             )
             : null
 
+        // the entire plugin item
         return React.createElement(
             'li',
             {
+                id: this.props.pluginData.name + 'Container',
                 className: `${this.state.active ? 'active' : ''} ${this.props.pluginData.isPromoted ? 'isPromoted': ''}`,
-                onClick: this.handlePreviewClick.bind(this),
-                onBlur: this.handleBlur.bind(this),
+                onClick: this.handlePreviewClick.bind(this)
                 //key: `plugin-${this.props.pluginData.id}`
             },
             [
+                // the plugin content container
                 React.createElement(
                     'div',
                     {
                         className: 'columns is-mobile',
+                        id: this.props.pluginData.name + 'ContentContainer',
                         key: 'columns'
                     },
                     [
@@ -493,6 +536,7 @@ class PluginItem extends React.Component {
                                 pluginName,
                                 pluginDescription,
                                 authorInfo,
+                                seeMore
                             ]
                         ),
                         React.createElement(
@@ -502,19 +546,23 @@ class PluginItem extends React.Component {
                                 className: 'column pluginControls'
                             },
                             pluginInstallButton,
-                            githubButton,
+                            githubButton
                         )
                     ]
                 ),
+
+                // the panel of additional info, including a GitHub preview
                 React.createElement(
                     'div', 
                     {
                         ref: this.previewRef,
                         tabIndex: -1,
                         key: 'markdown',
-                        className: `preview`
+                        className: `preview`,
+                        id: this.props.pluginData.name + 'PreviewContainer'
                     },
                     [
+                        // the github preview pane
                         React.createElement(
                             'div', 
                             {
