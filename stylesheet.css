@@ -35,6 +35,7 @@ body{
     margin-bottom:10px;
     padding:10px;
     position: relative;
+    cursor: pointer;
 }
 
 #InstallPluginControls input{
@@ -83,14 +84,31 @@ li .field {
 
 .pluginDescription{
     font-size:12px;
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
+.pluginSeeMoreContainer {
+    display: block;
+    clear: left;
+    padding-top: 10px;
+    cursor: pointer;
+}
+
+#seeMoreHyperlink {
+    color: #4676a9;
+}
+
+#seeMoreHyperlink:hover {
+    color: #77d0ec;
 }
 
 .githubButton{
     margin-right: 10px;
     display: inline-block;
+    cursor: pointer;
 }
 
 .authorContainer img{
@@ -99,6 +117,12 @@ li .field {
     width:20px;
     border-radius: 10px;
 }
+
+/* removing until hyperlink to author org is fixed
+.authorContainer {
+    cursor: pointer;
+}
+*/
 
 .authorContainer div{
     float:left;
@@ -125,6 +149,15 @@ li .field {
     margin-right: 3px;
 }
 
+.fa-github {
+    color: #4676a9;
+}
+
+.fa-github:hover {
+    color: #77d0ec;
+}
+
+
 .isPromoted .fa-star{
     color:gold;
 }
@@ -139,40 +172,13 @@ li .field {
 
 .pluginList li{
     position: relative;
-    cursor:pointer;
     border-top: solid 1px #ccc;
-}
-
-.pluginList li:hover{
-    background-color: #edf8fc;
-}
-
-.pluginList li .preview{
-    display:none;
-    background-color:white;
-    position:absolute;
-    top:30px;
-    left:20px;
-    right:20px;
-    border:solid 1px #ccc;
-    z-index:2;
-    padding: 20px;
-    transform: scale(.8);
-    transform-origin: top;
-    outline:none;
-    cursor:default;
-    max-height:300px;
-    overflow-y: scroll;
 }
 
 .pluginList li .control.is-loading{
     width: 66%;
     font-size:2rem;
     height:100px;
-}
-
-.pluginList li.active .preview{
-    display:block;
 }
 
 .pluginList li .columns{
@@ -203,7 +209,6 @@ li .field {
     padding-right:0px;
     max-width: 40px;
     min-width: 40px;
-    margin-top: 16px;
 }
 
 .pluginList li .pluginContent{
@@ -213,6 +218,65 @@ li .field {
 #pluginRow {
     margin-left: 10px;
     margin-right: 10px;
+}
+
+/* the info container, which includes the README from GitHub */
+#pluginInfoContainer {
+    border: none;
+    margin-left: 30px;
+    max-height: 500px; /* ensure this is taller than the .preview itself */
+    overflow-y: hidden;
+    background-color: #f8f8f8;
+}
+
+/* the labels used for the additional plugin information */
+.pluginInfoLabel {
+    font-weight: bold;
+    font-size: 15px;
+    color: #6b6b6b;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.pluginInfoData {
+    display: inline;
+    font-weight: normal;
+}
+
+/* the GitHub markdown preview */
+.preview li{
+    padding: 0 !important;
+}
+
+.preview h1{
+    padding: 0 !important;
+}
+
+.preview img{
+    border: solid 1px gray;
+}
+
+.pluginList li .preview{
+    display:none;
+    background-color:white;
+    max-height:300px;
+    overflow-y: scroll;
+}
+
+.pluginList li.active .preview{
+    display: block;
+    border: 1px solid #4676a9;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 10px;
+}
+
+.pluginList li.active .preview:hover {
+    border: 1px solid #c3e8f4;
+}
+
+.pluginList li.active .preview:focus {
+    outline: none;
 }
 
 .groupHeader{
@@ -262,14 +326,6 @@ li .field {
     top: 2px;
     margin-top: 9px;
     padding-top: 3px;
-}
-
-.preview h1{
-    padding: 0 !important;
-}
-
-.preview img{
-    border: solid 1px gray;
 }
 
 .pluginBadge + h1 {
