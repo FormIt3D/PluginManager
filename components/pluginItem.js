@@ -162,6 +162,9 @@ class PluginItem extends React.Component {
                 // get the versions JSON from the object
                 const versionsJSON = await versionsObject.json();
 
+                // TODO: Use new FormIt API "GetLatestVersion" instead of the below code
+                // v22 and newer
+
                 // the subpath that needs to be accessed from the plugin root dir, depending on the client version
                 let versionPath = '';
                 
@@ -276,22 +279,6 @@ class PluginItem extends React.Component {
         }
     }
 
-    /*
-    handleBlur(){
-        this.setState({
-            active:false,
-        });
-
-        //to prevent re-opening when re-clicked.
-        this.canOpen = false;
-
-        setTimeout(() => {
-            this.canOpen = true;
-        }, 500);
-        
-    }
-    */
-
     async handlePreviewClick() {
         if (!this.state.active)
         {
@@ -345,12 +332,7 @@ class PluginItem extends React.Component {
             {
                 key: this.props.pluginData.id + 'install',
                 className: 'field',
-                title: this.state.isInstalled ? 'Uninstall': 'Install',
-                onClick: (e) => {
-                    //TODO Not working, find out why.
-                    //e.preventDefault();
-                    //e.stopPropagation();
-                }
+                title: this.state.isInstalled ? 'Uninstall': 'Install'
             },
             [
                 React.createElement(
@@ -462,15 +444,12 @@ class PluginItem extends React.Component {
         const seeMore = React.createElement(
             'a',
             {
-                key: this.props.id + 'SeeMoreHyperlink',
+                key: this.props.pluginData.id + 'SeeMoreHyperlink',
+                id: 'seeMoreHyperlink',
                 className: 'pluginSeeMoreContainer',
-                onClick: (e) => {
-                    FormItInterface.CallMethod("FormIt.OpenURL", this.props.pluginData.html_url);
-                    e.stopPropagation();
-                    e.preventDefault();
-                }
+                onClick: this.handlePreviewClick.bind(this)
             },
-                'See More'
+                this.state.active ? 'See Less' : 'See More'
         );
 
         const githubButton = this.props.pluginData.git_url
@@ -483,7 +462,7 @@ class PluginItem extends React.Component {
                         e.stopPropagation();
                         e.preventDefault();
                     },
-                    title:'Visit github project'
+                    title:'Visit GitHub project'
                 },
                 React.createElement('i', {className:'fab fa-github fa-lg'}, '')
             )
@@ -494,8 +473,7 @@ class PluginItem extends React.Component {
             'li',
             {
                 id: this.props.pluginData.name + 'Container',
-                className: `${this.state.active ? 'active' : ''} ${this.props.pluginData.isPromoted ? 'isPromoted': ''}`,
-                onClick: this.handlePreviewClick.bind(this)
+                className: `${this.state.active ? 'active' : ''} ${this.props.pluginData.isPromoted ? 'isPromoted': ''}`
                 //key: `plugin-${this.props.pluginData.id}`
             },
             [
@@ -555,24 +533,77 @@ class PluginItem extends React.Component {
                 React.createElement(
                     'div', 
                     {
-                        ref: this.previewRef,
-                        tabIndex: -1,
-                        key: 'markdown',
+                        key: 'pluginInfoContainer',
                         className: `preview`,
-                        id: this.props.pluginData.name + 'PreviewContainer'
+                        id: 'pluginInfoContainer'
                     },
                     [
-                        // the github preview pane
+                        // the plugin type label
                         React.createElement(
                             'div', 
                             {
-                                key: 'loading',
-                                className: `${this.state.markdown ? '' : 'control is-loading'}`,
-                                dangerouslySetInnerHTML: {__html: this.state.markdown,}
+                                key: 'pluginTypeLabel',
+                                className: 'pluginInfoLabel'
+                            }, 'Plugin type: ',
+
+                            React.createElement(
+                                'div', 
+                                {
+                                    key: 'pluginTypeData',
+                                    className: `pluginInfoData`
+                                },
+                                (this.state.manifest && this.state.manifest.PluginType) ? this.state.manifest.PluginType : 'Not specified'
+                            ),
+                        ),
+                        // the plugin platform label
+                        React.createElement(
+                            'div', 
+                            {
+                                key: 'pluginPlatformLabel',
+                                className: 'pluginInfoLabel'
+                            }, 'Platforms: ',
+
+                            React.createElement(
+                                'div', 
+                                {
+                                    key: 'pluginPlatformData',
+                                    className: `pluginInfoData`
+                                },
+                                (this.state.manifest && this.state.manifest.Platforms) ? this.state.manifest.Platforms : 'Web, Windows'
+                            ),
+                        ),
+                        // the README label
+                        React.createElement(
+                            'div', 
+                            {
+                                key: 'READMELabel',
+                                className: `pluginInfoLabel`
                             },
-                            null
-                        )
-                    ]
+                            'Repo description:'
+                        ),
+                    ],
+                    React.createElement(
+                        'div', 
+                        {
+                            ref: this.previewRef,
+                            tabIndex: -1,
+                            key: 'markdown',
+                            className: `preview`,
+                            id: this.props.pluginData.name + 'PreviewContainer'
+                        },
+                        [
+                            // the github preview pane
+                            React.createElement(
+                                'div', 
+                                {
+                                    key: 'loading',
+                                    className: `${this.state.markdown ? '' : 'control is-loading'}`,
+                                    dangerouslySetInnerHTML: {__html: this.state.markdown,}
+                                },
+                                null
+                            )
+                        ]
+                    )
                 )
             ]
         );
