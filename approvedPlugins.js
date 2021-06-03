@@ -11,7 +11,6 @@ const approvedPlugins = [
     "https://github.com/FormIt3D/PropertiesPlus",
     "https://github.com/FormIt3D/RandomRotateScale",
     "https://github.com/FormIt3D/RebuildCurve",
-    "https://github.com/FormIt3D/SortMaterials",
     "https://github.com/FormIt3D/ValidateCleanModel",
     //"https://github.com/FormIt3D/DialogFromToolbar",
     //"https://github.com/FormIt3D/HelloBlockAsync",
