@@ -117,6 +117,8 @@ class PluginItem extends React.Component {
             showOnThisPlatform: true
         };
 
+        this.isInstalled = props.pluginData.isInstalled;
+
         this.previewRef = React.createRef();
 
         //not using react state to avoid async problems with click events.
@@ -220,7 +222,7 @@ class PluginItem extends React.Component {
 
             const manifestJSON = await manifestObject.json();
 
-            if (manifestJSON.hasOwnProperty('Platforms'))
+            if (!this.isInstalled && manifestJSON.hasOwnProperty('Platforms'))
             {
                 let currentPlatform = FormItInterface.Platform;
 
