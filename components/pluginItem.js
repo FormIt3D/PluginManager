@@ -221,7 +221,7 @@ class PluginItem extends React.Component {
             }
 
             const manifestJSON = await manifestObject.json();
-            
+
             if (!this.isInstalled && manifestJSON.hasOwnProperty('Platforms'))
             {
                 let currentPlatform = FormItInterface.Platform;
