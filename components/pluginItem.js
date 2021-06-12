@@ -114,6 +114,7 @@ class PluginItem extends React.Component {
             active: false,
             //isInstalled : this.props.pluginData.isInstalled
             iconUrl: '',
+            isRecentlyUpdated: '',
             showOnThisPlatform: true
         };
 
@@ -257,6 +258,18 @@ class PluginItem extends React.Component {
 
                 this.setState({iconUrl})
             }
+
+            // calculate how recently the plugin was updated 
+            const maxDaysElapsed = 10;
+            let lastPushDate = new Date(this.props.pluginData.pushed_at);
+            let today = new Date();
+
+            let timeSinceLastUpdate = today.getTime() - lastPushDate.getTime();
+            let daysSinceLastUpdate = timeSinceLastUpdate / (1000 * 3600 * 24);
+
+            this.setState({
+                isRecentlyUpdated: daysSinceLastUpdate < maxDaysElapsed
+            })
             
         }catch(e){
             console.log('Could not fetch manifest for', this.props.pluginData.name, e);
@@ -442,6 +455,28 @@ class PluginItem extends React.Component {
             )
             : null;
 
+            const updateTags = this.props.pluginData.git_url 
+            ? React.createElement(
+                'div',
+                {
+                    key: this.props.pluginData.id + 'updateTagsContainer',
+                    className: 'updateTagsContainer'
+                },
+                [
+                    // the updated recently tag, if applicable
+                    React.createElement(
+                        'div',
+                        {
+                            key: this.props.pluginData.pushed_at,
+                            className: this.state.isRecentlyUpdated ? 'lastUpdatedTag' : '',
+                            title: 'Last updated: ' + this.props.pluginData.pushed_at
+                        },
+                        this.state.isRecentlyUpdated ? 'Recently updated' : ''
+                    )
+                ]
+            )
+            : null;
+
         // the "see more" link that reveals the preview
         const seeMore = React.createElement(
             'a',
@@ -516,6 +551,7 @@ class PluginItem extends React.Component {
                                 pluginName,
                                 pluginDescription,
                                 authorInfo,
+                                updateTags,
                                 seeMore
                             ]
                         ),
