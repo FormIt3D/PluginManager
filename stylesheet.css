@@ -130,7 +130,6 @@ li .field {
     width: 100px;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
     margin-left:5px;
 }
 
@@ -330,4 +329,16 @@ li .field {
 
 .pluginBadge + h1 {
     margin-left:25px;
+}
+
+.updateTagsContainer {
+    clear: left;
+}
+
+.lastUpdatedTag {
+    background-color: rgb(238, 255, 170);
+    padding: 4px 6px 4px 6px;
+    float: left;
+    margin-top: 10px;
+    font-size: 12px;
 }
