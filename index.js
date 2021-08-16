@@ -14,9 +14,13 @@ class Main{
 
     //This migrates plugins from their previous git structure so clients stay in sync with latest plugin.
     migratePlugins(callback){
-        if (localStorage.getItem('hasMigrated')){
-            callback();
-            return;
+        try {
+            if (localStorage.getItem('hasMigrated')){
+                callback();
+                return;
+            }
+        } catch(e) {
+            console.log('Skipping hasMigrated check')
         }
 
         const migrationMap = {
