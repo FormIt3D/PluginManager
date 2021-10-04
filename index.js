@@ -19,7 +19,6 @@ class Main {
             try {
                 //TODO? If we have future plugins to detect, loop through a list
                 const lumionPath = "C:/ProgramData/Autodesk/ApplicationPlugins/LumionLiveSyncForFormIt.bundle/Contents/LiveSyncForFormIt.dll";
-                //const lumionPath = "C:/ProgramData/Autodesk/test/test.txt";
 
                 const lumionPluginUrl = "https://formit3d.github.io/Lumion";
 
