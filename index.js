@@ -1,26 +1,69 @@
 import AppRoot from "./components/appRoot.js";
 
-class Main{
-    constructor(){
+class Main {
+    constructor() {
         const domContainer = document.getElementById('Root');
-        const appRoot = React.createElement(AppRoot, {
-        }, null);
-        FormItInterface.Initialize(() => {
+        const appRoot = React.createElement(AppRoot, {}, null);
+        FormItInterface.Initialize(async() => {
+            await this.detectManuallyInstalledAddins();
+
+            //TODO rewrite this as a promise.
             this.migratePlugins(() => {
                 ReactDOM.render(appRoot, domContainer);
             });
         });
     }
 
+    detectManuallyInstalledAddins() {
+        return new Promise((resolve, reject) => {
+            try {
+                //TODO? If we have future plugins to detect, loop through a list
+                //const lumionPath = "C:/ProgramData/Autodesk/ApplicationPlugins/LumionLiveSyncForFormIt.bundle/Contents/LiveSyncForFormIt.dll";
+                const lumionPath = "C:/ProgramData/Autodesk/test/test.txt";
+
+                const lumionPluginUrl = "https://formit3d.github.io/Lumion";
+
+                FormItInterface.CallMethod("FormIt.GetInstalledPlugins", "", async(installedPlugins) => {
+                    installedPlugins = JSON.parse(installedPlugins).filter(p => p);
+
+                    //Don't try to install the plugin if it already exists.
+                    if (installedPlugins.indexOf(lumionPluginUrl) > -1) {
+                        console.log("Detected plugin already installed");
+                        resolve();
+                        return;
+                    } else {
+                        const fileExists = await FormIt.FileSystem.FileExists(lumionPath);
+                        console.log('file exists: ', fileExists);
+
+                        if (fileExists) {
+                            console.log('Installing Plugin from ', lumionPluginUrl);
+                            FormItInterface.CallMethod("FormIt.InstallPlugin", lumionPluginUrl, () => {
+                                resolve();
+                                return;
+                            });
+                        } else {
+                            resolve();
+                            return;
+                        }
+                    }
+                });
+            } catch (e) {
+                console.log(e);
+                reject(e);
+                return;
+            }
+        });
+    }
+
     //This migrates plugins from their previous git structure so clients stay in sync with latest plugin.
-    migratePlugins(callback){
+    migratePlugins(callback) {
         try {
-            if (localStorage.getItem('hasMigrated')){
+            if (localStorage.getItem('hasMigrated')) {
                 callback();
                 return;
             }
-        } catch(e) {
-            console.log('Skipping hasMigrated check')
+        } catch (e) {
+            console.log('Skipping hasMigrated check');
         }
 
         const migrationMap = {
@@ -41,33 +84,33 @@ class Main{
 
             const migrationPromises = [];
 
-            if (installedPlugins.length){
+            if (installedPlugins.length) {
                 installedPlugins.forEach((installedPluginPath) => {
                     const migrationPath = migrationMap[installedPluginPath]
 
-                    if (migrationPath){
-                        const migratePromise = new Promise((resolve,reject) => {
+                    if (migrationPath) {
+                        const migratePromise = new Promise((resolve, reject) => {
                             console.log('in promise')
                             FormItInterface.CallMethod("FormIt.UninstallPlugin", installedPluginPath, () => {
                                 FormItInterface.CallMethod("FormIt.InstallPlugin", migrationPath, () => {
                                     resolve();
-                                });   
+                                });
                             });
                         });
 
-                        migrationPromises.push(migratePromise);  
+                        migrationPromises.push(migratePromise);
                     }
 
-                    if(migrationPromises.length){
+                    if (migrationPromises.length) {
                         Promise.all(migrationPromises).then(() => {
                             callback();
                             localStorage.setItem('hasMigrated', 'true');
                         });
-                    }else{
+                    } else {
                         callback();
                     }
                 });
-            }else{
+            } else {
                 callback();
             }
         });
