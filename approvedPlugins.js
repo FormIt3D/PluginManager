@@ -6,6 +6,7 @@ const approvedPlugins = [
     "https://github.com/FormIt3D/FlipAlong",
     "https://github.com/FormIt3D/GenerateStringLights",
     "https://github.com/FormIt3D/GenerateVertex",
+    "https://github.com/FormIt3D/GroupSwapper",
     "https://github.com/FormIt3D/ManageAxes",
     "https://github.com/FormIt3D/ManageCameras",
     "https://github.com/FormIt3D/MeshUnmeshAll",
