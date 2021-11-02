@@ -118,6 +118,8 @@ class PluginItem extends React.Component {
             showOnThisPlatform: true
         };
 
+        this.handleMarkdownClick = this.handleMarkdownClick.bind(this);
+
         this.isInstalled = props.pluginData.isInstalled;
 
         this.previewRef = React.createRef();
@@ -333,6 +335,18 @@ class PluginItem extends React.Component {
             this.setState({
                 active:false
             });
+        }
+    }
+
+    handleMarkdownClick(event){
+        if (event.target && event.target.href){
+            const href = event.target.href;
+
+            if (FormIt.OpenURL){
+                FormIt.OpenURL(href); 
+            }else{
+                FormItInterface.CallMethod("FormIt.OpenURL", href);
+            }
         }
     }
 
@@ -627,7 +641,8 @@ class PluginItem extends React.Component {
                             tabIndex: -1,
                             key: 'markdown',
                             className: `preview`,
-                            id: this.props.pluginData.name + 'PreviewContainer'
+                            id: this.props.pluginData.name + 'PreviewContainer',
+                            onClick: this.handleMarkdownClick
                         },
                         [
                             // the github preview pane
