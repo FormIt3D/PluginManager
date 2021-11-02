@@ -1,5 +1,6 @@
 const approvedPlugins = [
     "https://github.com/FormIt3D/PluginPlayground",
+    "https://github.com/FormIt3D/Lumion",
     "https://github.com/FormIt3D/DynamoEyedropper",
     "https://github.com/FormIt3D/ExtractMaterialTextures",
     "https://github.com/FormIt3D/FilletCorner",
