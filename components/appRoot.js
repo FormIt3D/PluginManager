@@ -24,8 +24,10 @@ class AppRoot extends React.Component {
 
     //TODO error handling.
     async discoverPlugins(){
+            //TODO, there can be multiple pages. We should figure out the best UX to fetch new pages.
             const publicPluginsResult = await this.octokit.search.repos({
-                q: 'topic:formit-plugin'//&sort=stars&order=desc',
+                q: 'topic:formit-plugin',
+                per_page: 100
             });
 
             //TODO verify recommended.
