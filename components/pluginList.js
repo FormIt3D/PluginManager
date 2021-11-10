@@ -6,17 +6,8 @@ class PluginList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isOpen: this.props.isOpen,
-            numItems: 0
+            isOpen: this.props.isOpen
         };
-
-        this.addToGroupTotalFunc = this.addToGroupTotal.bind(this)
-    }
-
-    addToGroupTotal(){
-        this.setState({
-            numItems: this.state.numItems + 1
-        });
     }
 
     render(){
@@ -24,8 +15,7 @@ class PluginList extends React.Component {
             return React.createElement(PluginItem, {
                 key: `pluginItem-${this.props.pluginGroup}-${pluginData ? pluginData.id : i}`,
                 pluginData,
-                toggleInstallPlugin: this.props.toggleInstallPlugin,
-                addToGroupTotal: this.addToGroupTotalFunc
+                toggleInstallPlugin: this.props.toggleInstallPlugin
             }, null);
         });
 
@@ -80,7 +70,7 @@ class PluginList extends React.Component {
                                 className:'count',
                                 key:'count'
                             },
-                            this.state.numItems
+                            this.props.plugins.length
                         )
                     ]
                 ),

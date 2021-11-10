@@ -114,8 +114,7 @@ class PluginItem extends React.Component {
             active: false,
             //isInstalled : this.props.pluginData.isInstalled
             iconUrl: '',
-            isRecentlyUpdated: '',
-            showOnThisPlatform: true
+            isRecentlyUpdated: ''
         };
 
         this.handleMarkdownClick = this.handleMarkdownClick.bind(this);
@@ -127,128 +126,19 @@ class PluginItem extends React.Component {
         //not using react state to avoid async problems with click events.
         this.canOpen = true;
 
-        this.fetchManifest();
+        this.processManifest();
     }
 
-    async fetchManifest(){
-
+    processManifest(){
         try {
-            // first, try to get manifest.json at the root folder
-            let manifestURL = (this.props.pluginData.git_url) 
-                ? `https://${this.props.pluginData.owner.login}.github.io/${this.props.pluginData.name}/manifest.json`
-                : `${this.props.pluginData.local_url}/manifest.json`;
 
-            const pluginName = (this.props.pluginData.git_url) 
-            ? `${this.props.pluginData.name}`
-            : `${this.props.pluginData.local_url}`;
+            if(!("manifest" in this.props.pluginData))
+                return
 
-            // this may throw a 404 if the plugin's manifest is not at the root
-            // this is a valid configuration - the plugin may be versioned and its versions may exclusively live in subfolders
-            let manifestObject = await fetch(manifestURL);
+            let manifestJSON = this.props.pluginData.manifest,
+                manifestURL = manifestJSON.manifestURL;
 
-            // if we couldn't find it at the root, use versions.json to get the versioned path
-            if (!manifestObject.ok) {
-
-                pluginItemConsoleLog("No manifest.json found at the root of " + pluginName + " plugin, looking for a versioned subdir instead...");
-
-                // try to get versions.json
-                const versionsURL = (this.props.pluginData.git_url) 
-                ? `https://${this.props.pluginData.owner.login}.github.io/${this.props.pluginData.name}/versions.json`
-                : `${this.props.pluginData.local_url}/versions.json`;
-
-                const versionsObject = await fetch(versionsURL);
-
-                if (!versionsObject.ok) {
-
-                    // we couldn't find versions.json
-                    throw Error("No versions.json found.");
-                }
- 
-                // get the versions JSON from the object
-                const versionsJSON = await versionsObject.json();
-
-                // TODO: Use new FormIt API "GetLatestVersion" instead of the below code
-                // v22 and newer
-
-                // the subpath that needs to be accessed from the plugin root dir, depending on the client version
-                let versionPath = '';
-                
-                // get the current FormIt client version
-                const clientVersionData = await FormIt.Version();
-                const clientVersionMajor = clientVersionData["internalMajor"];
-                const clientVersionMinor = clientVersionData["internalMinor"];
-
-                // if the plugin is versioned, that client version is the minimum required to run the plugin
-                let pluginMinimumVersionMajor = 0;
-                let pluginMinimumVersionMinor = 0;
-
-                // versions.json may have multiple versions specified; find the one compatible with this version of FormIt
-                for (let i = 0; i < versionsJSON.length; i++)
-                {
-                    if ((clientVersionMajor >= versionsJSON[i]["version"]["major"]) && 
-                    (clientVersionMinor >= versionsJSON[i]["version"]["minor"]) && 
-                    ((versionsJSON[i]["version"]["major"] >= pluginMinimumVersionMajor) && 
-                    (versionsJSON[i]["version"]["minor"] >= pluginMinimumVersionMinor)))
-                    {
-                        versionPath = versionsJSON[i]["path"];
-                        pluginMinimumVersionMajor = versionsJSON[i]["version"]["major"];
-                        pluginMinimumVersionMinor = versionsJSON[i]["version"]["minor"];
-                    }
-                }
-
-                // did we get a version path from versions.json?
-                if (versionPath === '') {
-
-                    // no valid version path
-                    throw Error("No valid path found in versions.json.");
-                }
-
-                pluginItemConsoleLog("Adding to plugin list: " + this.props.pluginData.name + " for FormIt version " + pluginMinimumVersionMajor + "." + pluginMinimumVersionMinor + " or newer.");
-
-                const versionedURL = (this.props.pluginData.git_url) 
-                ? `https://${this.props.pluginData.owner.login}.github.io/${this.props.pluginData.name}/${versionPath}/manifest.json`
-                : `${this.props.pluginData.local_url}/${versionPath}/manifest.json`;
-
-                manifestObject = await fetch(versionedURL);
-                manifestURL = versionedURL;
-
-                if (!manifestObject.ok) {
-
-                    // we still couldn't find manifest.json
-                    throw Error("No manifest.json found in the version subfolder, either. " + manifestObject.statusText);
-                }
-            }
-            else
-            {
-                pluginItemConsoleLog("Adding to plugin list: " + this.props.pluginData.name + " for any FormIt version.");
-            }
-
-            const manifestJSON = await manifestObject.json();
-
-            if (!this.isInstalled && manifestJSON.hasOwnProperty('Platforms'))
-            {
-                let currentPlatform = FormItInterface.Platform;
-
-                if (manifestJSON.Platforms.includes(currentPlatform))
-                {
-                    this.setState({
-                        showOnThisPlatform: true
-                    });
-                }
-                else                
-                {
-                    this.setState({
-                        showOnThisPlatform: false
-                    });
-                    return;
-                }
-            }
-
-            this.props.addToGroupTotal();
-
-            this.setState({
-                manifest: manifestJSON
-            });
+            this.state.manifest = manifestJSON;
 
             // set the icon
             if (manifestJSON && manifestJSON.PanelIcon) {
@@ -258,7 +148,7 @@ class PluginItem extends React.Component {
 
                 const iconUrl = `${manifestJSON.PanelIcon.replace('PLUGINLOCATION', pluginLocation)}`;
 
-                this.setState({iconUrl})
+                this.state.iconUrl = iconUrl;
             }
 
             // calculate how recently the plugin was updated 
@@ -269,9 +159,7 @@ class PluginItem extends React.Component {
             let timeSinceLastUpdate = today.getTime() - lastPushDate.getTime();
             let daysSinceLastUpdate = timeSinceLastUpdate / (1000 * 3600 * 24);
 
-            this.setState({
-                isRecentlyUpdated: daysSinceLastUpdate < maxDaysElapsed
-            })
+            this.state.isRecentlyUpdated = daysSinceLastUpdate < maxDaysElapsed;
             
         }catch(e){
             console.log('Could not fetch manifest for', this.props.pluginData.name, e);
@@ -351,11 +239,6 @@ class PluginItem extends React.Component {
     }
 
     render(){
-        if (!this.state.showOnThisPlatform)
-        {
-            return null;
-        }
-
         const pluginInstallButton = React.createElement(
             'div',
             {
