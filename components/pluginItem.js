@@ -313,10 +313,19 @@ class PluginItem extends React.Component {
                         throw Error(resultObj.statusText);
                     }
     
-                    const data = await resultObj.text();
+                    const data = await resultObj.text(),
+                        renderer = new marked.Renderer(),
+                        linkRenderer = renderer.link
+
+                    renderer.link = (href, title, text) => {
+                        // Use the built-in link renderer for XSS vulnerability coverage
+                        const html = linkRenderer.call(renderer, href, title, text);
+                        // Convert standard links to open in new window
+                        return html.replace(/^<a /, '<a target="_blank" rel="nofollow" ');
+                    }
     
                     this.setState({
-                        markdown: marked.parse(data)
+                        markdown: marked.parse(data, {renderer})
                     });
                 }
                 catch(e){
