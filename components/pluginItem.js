@@ -316,7 +316,7 @@ class PluginItem extends React.Component {
                     const data = await resultObj.text();
     
                     this.setState({
-                        markdown: marked(data)
+                        markdown: marked.parse(data)
                     });
                 }
                 catch(e){
