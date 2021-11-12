@@ -12,7 +12,7 @@ class SearchPlugins extends React.Component {
     }
 
     render(){
-        const domInput = React.createRef(),
+        const searchInputRef = React.createRef(),
             input =  React.createElement('input', {
                 key: 'searchInput',
                 className: 'input',
@@ -30,7 +30,7 @@ class SearchPlugins extends React.Component {
                         })
                     })
                 },
-                ref: domInput
+                ref: searchInputRef
             })
 
         return [
@@ -48,7 +48,7 @@ class SearchPlugins extends React.Component {
                             if (this.state.searchTerm){
                                 this.setState({searchTerm: ''})
                             }
-                            domInput.current.focus();
+                            searchInputRef.current.focus();
                         },
                         title:'Search'
                     },

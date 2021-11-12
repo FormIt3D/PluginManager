@@ -214,7 +214,7 @@ class AppRoot extends React.Component {
             let currentPlatform = FormItInterface.Platform;
 
             // Fetch the manifests for the plugins and filter out the ones not on user's platform
-            const pluginsLoop = async (_plugins, keepInstalled = false) => {
+            const fetchFilterManifest = async (_plugins, keepInstalled = false) => {
                 let filtered = []
                 for(let pluginIx in _plugins) {
                     let plugin = _plugins[pluginIx];
@@ -231,9 +231,9 @@ class AppRoot extends React.Component {
                 return filtered;
             }
 
-            recommendedPlugins = await pluginsLoop(recommendedPlugins);
-            publicPlugins = await pluginsLoop(publicPlugins);
-            installedPlugins = await pluginsLoop(installedPlugins, true);
+            recommendedPlugins = await fetchFilterManifest(recommendedPlugins);
+            publicPlugins = await fetchFilterManifest(publicPlugins);
+            installedPlugins = await fetchFilterManifest(installedPlugins, true);
 
             this.setState({
                 plugins: {
