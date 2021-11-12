@@ -54,6 +54,28 @@ body{
     right:10px;
 }
 
+#SearchPlugins{
+    margin-bottom:10px;
+    padding:10px;
+    position: relative;
+    cursor: pointer;
+}
+
+#SearchPlugins input{
+    width:100%;
+}
+
+#SearchPlugins i{
+    font-size: 22px;
+    padding: 10px;
+}
+
+#SearchPlugins a{
+    color: #4676a9;
+    position: absolute;
+    right:10px;
+}
+
 h1{
     font-size: 20px !important;
     font-family: Arial !important;
