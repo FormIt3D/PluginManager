@@ -236,11 +236,10 @@ class AppRoot extends React.Component {
             installedPlugins = await fetchFilterManifest(installedPlugins, true);
 
             // Get all plugins for searching
-            var seen = {},
+            const seen = {},
                 allPlugins = recommendedPlugins.concat(publicPlugins)
-                    .filter(function(plugin) {
-                        var strPlugin = JSON.stringify(plugin);
-                        return seen.hasOwnProperty(strPlugin) ? false : (seen[strPlugin] = true);
+                    .filter((plugin) => {
+                        return seen.hasOwnProperty(plugin.id) ? false : (seen[plugin.id] = true);
                     })
 
             this.setState({
