@@ -235,8 +235,16 @@ class AppRoot extends React.Component {
             publicPlugins = await fetchFilterManifest(publicPlugins);
             installedPlugins = await fetchFilterManifest(installedPlugins, true);
 
+            // Get all plugins for searching
+            const seen = {},
+                allPlugins = recommendedPlugins.concat(publicPlugins)
+                    .filter((plugin) => {
+                        return seen.hasOwnProperty(plugin.id) ? false : (seen[plugin.id] = true);
+                    })
+
             this.setState({
                 plugins: {
+                    allPlugins,
                     recommendedPlugins,
                     publicPlugins,
                     installedPlugins,
@@ -308,7 +316,7 @@ class AppRoot extends React.Component {
                     React.createElement(SearchPlugins, {
                         addPlugin: this.addPlugin.bind(this),
                         key:'SearchPlugin',
-                        plugins: this.state.plugins.recommendedPlugins.concat(this.state.plugins.publicPlugins),
+                        plugins: this.state.plugins.allPlugins,
                         toggleInstallPlugin: this.toggleInstallPlugin.bind(this)
                     }, null),
                     React.createElement(PluginList, {
