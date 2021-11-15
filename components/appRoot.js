@@ -223,10 +223,9 @@ class AppRoot extends React.Component {
                         if (!keepInstalled && plugin.manifest.hasOwnProperty('Platforms') &&
                             !plugin.manifest.Platforms.includes(currentPlatform)) {
                                 continue;
-                        } else {
-                            filtered.push(plugin);
                         }
                     }
+                    filtered.push(plugin);
                 }
                 return filtered;
             }
