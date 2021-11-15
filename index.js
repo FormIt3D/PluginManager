@@ -30,7 +30,7 @@ class Main {
                         console.log("Detected plugin already installed");
                         resolve();
                         return;
-                    } else {
+                    } else if (FormItInterface.Platform == 'Windows') {
                         const fileExists = await FormIt.FileSystem.FileExists(lumionPath);
                         console.log('file exists: ', fileExists);
 
@@ -40,11 +40,10 @@ class Main {
                                 resolve();
                                 return;
                             });
-                        } else {
-                            resolve();
-                            return;
                         }
                     }
+                    resolve();
+                    return;
                 });
             } catch (e) {
                 console.log(e);
