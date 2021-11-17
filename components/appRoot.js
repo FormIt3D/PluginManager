@@ -253,7 +253,7 @@ class AppRoot extends React.Component {
         });
     }
 
-    async toggleInstallPlugin(plugin, isInstalling){
+    async toggleInstallPlugin(plugin, isInstalling, isLoading = false){
         //Might be necessary?
         /*const pagesResult = await this.octokit.repos.getPages({
             owner: plugin.owner.login,
@@ -264,6 +264,13 @@ class AppRoot extends React.Component {
             //For now, going to make a "guess" at github pages url. This is because I'm seeing a 404 on pages info request. It may require auth.
             ? `https://${plugin.owner.login}.github.io/${plugin.name}`
             : plugin.local_url;
+
+        if (isLoading){
+            FormItInterface.CallMethod("FormIt.LoadPlugin", pagesUrl, () => {
+                this.organizeToInstalledPlugins();
+            });
+            return;
+        }
 
         if (isInstalling){
             //TODO async/await wrappers
@@ -283,6 +290,12 @@ class AppRoot extends React.Component {
         this.toggleInstallPlugin({
             local_url:pluginUrl
         }, true);
+    }
+
+    loadPlugin(pluginUrl){
+        this.toggleInstallPlugin({
+            local_url:pluginUrl
+        }, true, true);
     }
 
     render() {
@@ -349,6 +362,7 @@ class AppRoot extends React.Component {
                     }, null),*/
                     React.createElement(InstallPluginControls, {
                         addPlugin: this.addPlugin.bind(this),
+                        loadPlugin: this.loadPlugin.bind(this),
                         key:'AddPlugin'
                     }, null),
                 ]
