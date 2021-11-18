@@ -34,9 +34,10 @@ class InstallPluginControls extends React.Component {
                 ,
                 'Add your private or local plugin:'),
                 input,
-                React.createElement('a',
+                React.createElement('button',
                     {
                         key: 'AddNew',
+                        className: "formit-web-button proceed",
                         onClick: () => {
                             if (this.state.installUrl){
                                 this.props.addPlugin(this.state.installUrl);
@@ -45,8 +46,22 @@ class InstallPluginControls extends React.Component {
                         },
                         title:'Add'
                     },
-                    React.createElement('i', {key: 'AddIcon', className:'fas fa-plus-circle'}, '')
+                    "Install"
                 ),
+                React.createElement('button',
+                    {
+                        key: 'LoadNew',
+                        className: "formit-web-button",
+                        onClick: () => {
+                            if (this.state.installUrl){
+                                this.props.loadPlugin(this.state.installUrl);
+                                this.setState({installUrl: ''});
+                            }
+                        },
+                        title:'Load'
+                    },
+                    "Load"
+                )
             ]
         );
     }

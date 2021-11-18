@@ -54,6 +54,33 @@ body{
     right:10px;
 }
 
+#InstallPluginControls button {
+    float: right;
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
+.formit-web-button {
+    background-color: white;
+    color: #4675A8;
+    width: 96px;
+    height: 30px;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    cursor: pointer;
+    border: solid 1px #A7BFD3;
+    border-radius: 3px;
+}
+
+.formit-web-button:hover {
+    box-shadow: 0 0 4px #0cbbf4;
+}
+
+.proceed {
+    color:white;
+    background-color: #4675a8;
+ }
+
 #SearchPlugins{
     margin-bottom:10px;
     padding:10px;
