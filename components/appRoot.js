@@ -21,6 +21,9 @@ class AppRoot extends React.Component {
         });
 
         this.discoverPlugins();
+  
+        FormItInterface.SubscribeMessage("FormIt.Message.kInstallPlugin", () => this.organizeToInstalledPlugins());
+        FormItInterface.SubscribeMessage("FormIt.Message.kUninstallPlugin", () => this.organizeToInstalledPlugins());
     }
 
     //TODO error handling.
