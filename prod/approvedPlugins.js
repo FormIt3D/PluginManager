@@ -1,0 +1,28 @@
+const approvedPlugins = [
+    "https://github.com/matterlab-co/FormIt-Context-Plugin",
+    "https://github.com/FormIt3D/PluginPlayground",
+    "https://github.com/FormIt3D/Lumion",
+    "https://github.com/FormIt3D/DynamoEyedropper",
+    "https://github.com/FormIt3D/ExtractMaterialTextures",
+    "https://github.com/FormIt3D/FilletCorner",
+    "https://github.com/FormIt3D/FlipAlong",
+    "https://github.com/FormIt3D/GenerateStringLights",
+    "https://github.com/FormIt3D/GenerateVertex",
+    "https://github.com/FormIt3D/GroupSwapper",
+    "https://github.com/FormIt3D/ManageAxes",
+    "https://github.com/FormIt3D/ManageCameras",
+    "https://github.com/FormIt3D/MeshUnmeshAll",
+    "https://github.com/FormIt3D/PropertiesPlus",
+    "https://github.com/FormIt3D/RandomRotateScale",
+    "https://github.com/FormIt3D/RebuildCurve",
+    "https://github.com/FormIt3D/SortMaterials",
+    "https://github.com/FormIt3D/ValidateCleanModel",
+    //"https://github.com/FormIt3D/DialogFromToolbar",
+    //"https://github.com/FormIt3D/HelloBlockAsync",
+    //"https://github.com/FormIt3D/ModalDialog",
+    //"https://github.com/FormIt3D/ModelessDialog",
+    //"https://github.com/FormIt3D/Messages",
+    //"https://github.com/FormIt3D/Toolbar",
+];
+
+export default approvedPlugins;
