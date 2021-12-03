@@ -1,0 +1,393 @@
+body{
+    display:flex;
+    flex-direction: column;
+    height:100%;
+    user-select: none;
+}
+
+#PluginContainer{
+    flex:1;
+    overflow-y:scroll;
+    overflow-x:hidden;
+}
+
+/* the accent color of the install switch */
+#PluginContainer .switch[type=checkbox].is-success:checked+label::before, .switch[type=checkbox].is-success:checked+label:before {
+    background: #77d0ec;
+}
+
+#MainLoader.control.is-loading{
+    width: 66%;
+    font-size:4rem;
+    height:150px;
+}
+
+#FindingText{
+    font-size:1rem;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    left: 22%;
+    width: 100%;
+}
+
+#InstallPluginControls{
+    margin-bottom:10px;
+    padding:10px;
+    position: relative;
+    cursor: pointer;
+}
+
+#InstallPluginControls input{
+    width:100%;
+}
+
+#InstallPluginControls i{
+    font-size: 22px;
+    padding: 10px;
+}
+
+#InstallPluginControls a{
+    color: #4676a9;
+    position: absolute;
+    top:33px;
+    right:10px;
+}
+
+#InstallPluginControls button {
+    float: right;
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
+.formit-web-button {
+    background-color: white;
+    color: #4675A8;
+    width: 96px;
+    height: 30px;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    cursor: pointer;
+    border: solid 1px #A7BFD3;
+    border-radius: 3px;
+}
+
+.formit-web-button:hover {
+    box-shadow: 0 0 4px #0cbbf4;
+}
+
+.proceed {
+    color:white;
+    background-color: #4675a8;
+ }
+
+#SearchPlugins{
+    margin-bottom:10px;
+    padding:10px;
+    position: relative;
+    cursor: pointer;
+}
+
+#SearchPlugins input{
+    width:100%;
+}
+
+#SearchPlugins i{
+    font-size: 22px;
+    padding: 10px;
+}
+
+#SearchPlugins a{
+    color: #4676a9;
+    position: absolute;
+    right:10px;
+}
+
+h1{
+    font-size: 20px !important;
+    font-family: Arial !important;
+    color: gray !important;
+    font-weight: bold !important;
+    margin-bottom: 0 !important;
+    padding: 0px 10px 10px 10px !important;
+}
+
+li {
+    list-style-type: none;
+}
+
+#PluginContainer ul li {
+    padding: 5px 10px 5px 12px;
+}
+
+li .field {
+    margin-top: 6px;
+}
+
+.pluginName{
+    font-weight:bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pluginDescription{
+    font-size:12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
+.pluginSeeMoreContainer {
+    display: block;
+    clear: left;
+    padding-top: 10px;
+    cursor: pointer;
+}
+
+#seeMoreHyperlink {
+    color: #4676a9;
+}
+
+#seeMoreHyperlink:hover {
+    color: #77d0ec;
+}
+
+.githubButton{
+    margin-right: 10px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.authorContainer img{
+    float:left;
+    height:20px;
+    width:20px;
+    border-radius: 10px;
+}
+
+/* removing until hyperlink to author org is fixed
+.authorContainer {
+    cursor: pointer;
+}
+*/
+
+.authorContainer div{
+    float:left;
+    font-size:12px;
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-left:5px;
+}
+
+.pluginStarsContainer{
+    float: left;
+    margin-right:10px;
+}
+
+.pluginStarsContainer .starCount{
+    float: left;
+}
+
+.pluginStarsContainer .fa-star{
+    float: left;
+    margin-top: 3px;
+    margin-right: 3px;
+}
+
+.fa-github {
+    color: #4676a9;
+}
+
+.fa-github:hover {
+    color: #77d0ec;
+}
+
+
+.isPromoted .fa-star{
+    color:gold;
+}
+
+.pluginList.open ul{
+    display:block;
+}
+
+.pluginList.closed ul{
+    display:none;
+}
+
+.pluginList li{
+    position: relative;
+    border-top: solid 1px #ccc;
+}
+
+.pluginList li .control.is-loading{
+    width: 66%;
+    font-size:2rem;
+    height:100px;
+}
+
+.pluginList li .columns{
+    margin-bottom:0px;
+    width:100%;
+}
+
+.pluginList li .column{
+    padding-bottom: 0px;
+}
+
+.columns {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.pluginList li .pluginControls{
+    padding: 11px 2px 0 0;
+}
+
+.pluginList li .pluginControls .githubButton,
+.pluginList li .pluginControls .field{
+    float:right;
+}
+
+.pluginList li .pluginIcon{
+    padding-left:0px;
+    padding-right:0px;
+    max-width: 40px;
+    min-width: 40px;
+}
+
+.pluginList li .pluginContent{
+    padding-left:10px 0 0 0;
+}
+
+#pluginRow {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+/* the info container, which includes the README from GitHub */
+#pluginInfoContainer {
+    border: none;
+    margin-left: 30px;
+    max-height: 500px; /* ensure this is taller than the .preview itself */
+    overflow-y: hidden;
+    background-color: #f8f8f8;
+}
+
+/* the labels used for the additional plugin information */
+.pluginInfoLabel {
+    font-weight: bold;
+    font-size: 15px;
+    color: #6b6b6b;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.pluginInfoData {
+    display: inline;
+    font-weight: normal;
+}
+
+/* the GitHub markdown preview */
+.preview li{
+    padding: 0 !important;
+}
+
+.preview h1{
+    padding: 0 !important;
+}
+
+.preview img{
+    border: solid 1px gray;
+}
+
+.pluginList li .preview{
+    display:none;
+    background-color:white;
+    max-height:300px;
+    overflow-y: scroll;
+}
+
+.pluginList li.active .preview{
+    display: block;
+    border: 1px solid #4676a9;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 10px;
+}
+
+.pluginList li.active .preview:hover {
+    border: 1px solid #c3e8f4;
+}
+
+.pluginList li.active .preview:focus {
+    outline: none;
+}
+
+.groupHeader{
+    cursor:pointer;
+    position:relative;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    margin: 10px;
+    background-color: hsl(0, 0%, 95%);
+}
+
+.groupHeader:hover {
+    background-color: #edf8fc;
+}
+
+.groupHeader.open {
+    background-color: #ebfaff
+}
+
+.groupHeader:active {
+    background-color: #ebfaff
+}
+
+.groupHeader i{
+    margin-right:5px;
+}
+
+.groupHeader .groupDescription {
+    font-size: 11px;
+    margin-left: 10px;
+    color: gray;
+}
+
+.groupHeader .count{
+    background-color: white;
+    border: 1px solid #4676a9;
+    font-size: 12px;
+    font-weight: 600;
+    color: grey;
+    border-radius: 20px;
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    right: 10px;
+    text-align: center;
+    top: 2px;
+    margin-top: 9px;
+    padding-top: 3px;
+}
+
+.pluginBadge + h1 {
+    margin-left:25px;
+}
+
+.updateTagsContainer {
+    clear: left;
+}
+
+.lastUpdatedTag {
+    background-color: rgb(238, 255, 170);
+    padding: 4px 6px 4px 6px;
+    float: left;
+    margin-top: 10px;
+    font-size: 12px;
+}
