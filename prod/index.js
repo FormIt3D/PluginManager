@@ -25,21 +25,41 @@ class Main {
                 FormItInterface.CallMethod("FormIt.GetInstalledPlugins", "", async(installedPlugins) => {
                     installedPlugins = JSON.parse(installedPlugins).filter(p => p);
 
-                    //Don't try to install the plugin if it already exists.
-                    if (installedPlugins.indexOf(lumionPluginUrl) > -1) {
-                        console.log("Detected plugin already installed");
-                        resolve();
-                        return;
-                    } else if (FormItInterface.Platform == 'Windows') {
-                        const fileExists = await FormIt.FileSystem.FileExists(lumionPath);
-                        console.log('file exists: ', fileExists);
+                    let isPluginInstalled = false;
 
-                        if (fileExists) {
-                            console.log('Installing Plugin from ', lumionPluginUrl);
+                    if (installedPlugins.indexOf(lumionPluginUrl) > -1) {
+                        isPluginInstalled = true;
+                    }
+                    
+                    if (FormItInterface.Platform == 'Windows') {
+                        const fileExists = await FormIt.FileSystem.FileExists(lumionPath);
+
+                        //check if we need to install it
+                        if (fileExists && !isPluginInstalled) {
                             FormItInterface.CallMethod("FormIt.InstallPlugin", lumionPluginUrl, () => {
+                                //remember that the plugin was installed via this detection process
+                                try {
+                                    //if we have future plugins that are detected, need to read array before writing
+                                    localStorage.setItem('pluginsInstalledByDetection', JSON.stringify([lumionPluginUrl]));
+                                } catch(e) {
+                                    console.log('Not adding pluginsInstalledByDetection since localStorage is not available');
+                                }
+
                                 resolve();
                                 return;
                             });
+                        //or check if we need to uninstall it
+                        }else if (!fileExists && isPluginInstalled){
+                            try{
+                                const pluginsInstalledByDetection = JSON.parse(localStorage.getItem('pluginsInstalledByDetection'));
+
+                                if (pluginsInstalledByDetection.indexOf(lumionPluginUrl) > -1) {
+                                    FormItInterface.CallMethod("FormIt.UninstallPlugin", lumionPluginUrl);
+                                    localStorage.setItem('pluginsInstalledByDetection', JSON.stringify([]));
+                                }
+                            } catch(e) {
+                                console.log('Not trying to uninstall detected plugins, localStorage is unavailable');
+                            }
                         }
                     }
                     resolve();
