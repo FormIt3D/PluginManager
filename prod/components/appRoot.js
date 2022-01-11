@@ -177,9 +177,15 @@ class AppRoot extends React.Component {
             const checkInstalled = (plugin) => {
                 //For now, going to make a "guess" at github pages url. This is because we'd have to make an 
                 //API request for each repo, and I don't want to worry about rate limiting.
-                const pagesUrl = `https://${plugin.owner.login}.github.io/${plugin.name}`;
+                const pagesUrl = `https://${plugin.owner.login}.github.io/${plugin.name}`.toLowerCase();
 
-                const installedIndex = installedPlugins.indexOf(pagesUrl);
+                var installedIndex = -1;
+                installedPlugins.forEach((pluginURL, pluginIndex) => {
+                    if (typeof pluginURL == 'string' && 
+                        pluginURL.toLowerCase().startsWith(pagesUrl)) {
+                        installedIndex = pluginIndex;
+                    }
+                });
                 plugin.isInstalled = installedIndex > -1;
 
                 //Also check if the plugin is a recommended plugin.
