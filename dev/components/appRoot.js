@@ -264,7 +264,7 @@ class AppRoot extends React.Component {
 
             // Get all plugins for searching
             const seen = {},
-                allPlugins = recommendedPlugins.concat(publicPlugins)
+                allPlugins = recommendedPlugins.concat(publicPlugins).concat(developersPlugins)
                     .filter((plugin) => {
                         return seen.hasOwnProperty(plugin.id) ? false : (seen[plugin.id] = true);
                     })
