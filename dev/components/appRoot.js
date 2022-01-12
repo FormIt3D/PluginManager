@@ -45,7 +45,6 @@ class AppRoot extends React.Component {
             });
 
             const developersPluginsResult = await this.octokit.search.repos({
-                //q: 'topic:formit-plugin-developers'//&sort=stars&order=desc',
                 q: developersPluginsRepos.map((devRepo) => 'repo:' + devRepo).join(' ')
             });
 
