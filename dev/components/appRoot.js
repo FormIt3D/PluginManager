@@ -382,8 +382,8 @@ class AppRoot extends React.Component {
                         key:'Public'
                     }, null),
                     React.createElement(PluginList, {
-                        pluginGroup: 'Developers',
-                        groupDescription: 'plugins built for developers',
+                        pluginGroup: 'For Developers',
+                        groupDescription: 'plugins to enable the creation of new FormIt plugins',
                         plugins:this.state.plugins.developersPlugins,
                         toggleInstallPlugin: this.toggleInstallPlugin.bind(this),
                         key:'Developers'
