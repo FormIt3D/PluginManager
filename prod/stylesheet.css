@@ -137,6 +137,7 @@ li .field {
     text-overflow: ellipsis;
     margin-bottom: 10px;
     margin-top: 5px;
+    white-space: pre-wrap;
 }
 
 .pluginSeeMoreContainer {
