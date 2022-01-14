@@ -6,6 +6,7 @@ import SearchPlugins from "./searchPlugins.js";
 import PluginBadge from "./pluginBadge.js";
 import approvedPlugins from "./../approvedPlugins.js";
 import promotedPlugins from "./../promotedPlugins.js";
+import developersPluginsRepos from "../developersPluginsRepos.js";
 
 import { Octokit } from "https://cdn.skypack.dev/@octokit/rest@18.5.4";
 
@@ -34,14 +35,21 @@ class AppRoot extends React.Component {
                 per_page: 100
             });
 
+            const hasPagesFilter = (repo) => {
+                return repo.has_pages;
+            };
+
             //TODO verify recommended.
             const recommendedPluginsResult = await this.octokit.search.repos({
                 q: 'topic:formit-plugin-recommended'//&sort=stars&order=desc',
             });
 
-            const publicPlugins = publicPluginsResult.data.items.filter((repo) => {
-                return repo.has_pages;
+            const developersPluginsResult = await this.octokit.search.repos({
+                q: developersPluginsRepos.map((devRepo) => 'repo:' + devRepo).join(' ')
             });
+
+            const publicPlugins = publicPluginsResult.data.items.filter(hasPagesFilter);
+            const developersPlugins = developersPluginsResult.data.items.filter(hasPagesFilter);
 
             //do some validation on our side that this plugin is actually recommended by us. Also check that it has pages installed.
             const recommendedPlugins = recommendedPluginsResult.data.items.filter((repo) => {
@@ -58,7 +66,7 @@ class AppRoot extends React.Component {
                 return hasPages && !isApproved;
             });
 
-            this.organizeToInstalledPlugins({publicPlugins, recommendedPlugins, needsApprovalPlugins});
+            this.organizeToInstalledPlugins({publicPlugins, recommendedPlugins, needsApprovalPlugins, developersPlugins});
     }
 
     async fetchManifest(pluginData){
@@ -181,12 +189,20 @@ class AppRoot extends React.Component {
 
                 var installedIndex = -1;
                 installedPlugins.forEach((pluginURL, pluginIndex) => {
+                    if (typeof pluginURL == 'object' && pluginURL.pagesUrl) {
+                        pluginURL = pluginURL.pagesUrl;
+                    }
                     if (typeof pluginURL == 'string' && 
                         pluginURL.toLowerCase().startsWith(pagesUrl)) {
                         installedIndex = pluginIndex;
                     }
                 });
                 plugin.isInstalled = installedIndex > -1;
+
+                // Set pages url for later comparisons
+                if (plugin.isInstalled && !plugin.pagesUrl) {
+                    plugin.pagesUrl = pagesUrl;
+                }
 
                 //Also check if the plugin is a recommended plugin.
                 plugin.isPromoted = promotedPlugins.indexOf(plugin.html_url) > -1;
@@ -206,7 +222,8 @@ class AppRoot extends React.Component {
 
             let recommendedPlugins = plugins.recommendedPlugins.map(checkInstalled).sort(sortFunc),
                 publicPlugins = plugins.publicPlugins.map(checkInstalled).sort(sortFunc),
-                needsApprovalPlugins = plugins.needsApprovalPlugins.map(checkInstalled).sort(sortFunc);
+                needsApprovalPlugins = plugins.needsApprovalPlugins.map(checkInstalled).sort(sortFunc),
+                developersPlugins = plugins.developersPlugins.map(checkInstalled).sort(sortFunc);
 
             installedPlugins = installedPlugins.map((plugin) => {
                 if (typeof plugin === 'object'){
@@ -242,10 +259,11 @@ class AppRoot extends React.Component {
             recommendedPlugins = await fetchFilterManifest(recommendedPlugins);
             publicPlugins = await fetchFilterManifest(publicPlugins);
             installedPlugins = await fetchFilterManifest(installedPlugins, true);
+            developersPlugins = await fetchFilterManifest(developersPlugins);
 
             // Get all plugins for searching
             const seen = {},
-                allPlugins = recommendedPlugins.concat(publicPlugins)
+                allPlugins = recommendedPlugins.concat(publicPlugins).concat(developersPlugins)
                     .filter((plugin) => {
                         return seen.hasOwnProperty(plugin.id) ? false : (seen[plugin.id] = true);
                     })
@@ -256,7 +274,8 @@ class AppRoot extends React.Component {
                     recommendedPlugins,
                     publicPlugins,
                     installedPlugins,
-                    needsApprovalPlugins
+                    needsApprovalPlugins,
+                    developersPlugins
                 }
             });
         });
@@ -360,6 +379,13 @@ class AppRoot extends React.Component {
                         plugins:this.state.plugins.publicPlugins,
                         toggleInstallPlugin: this.toggleInstallPlugin.bind(this),
                         key:'Public'
+                    }, null),
+                    React.createElement(PluginList, {
+                        pluginGroup: 'For Developers',
+                        groupDescription: 'plugins to enable the creation of new FormIt plugins',
+                        plugins:this.state.plugins.developersPlugins,
+                        toggleInstallPlugin: this.toggleInstallPlugin.bind(this),
+                        key:'Developers'
                     }, null),
                     //TODO, no hard strategy here yet.
                     /*React.createElement(PluginList, {

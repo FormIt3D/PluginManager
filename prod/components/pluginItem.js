@@ -293,15 +293,22 @@ class PluginItem extends React.Component {
                 : this.props.pluginData.name || this.props.pluginData.local_url
         );
 
+        let pluginDescriptionText = (this.state.manifest
+            ? this.state.manifest.PluginDescription
+            : this.props.pluginData.description || 'No description provided.').replace(/\r\s/g, '\r\n');
+
+        // Trim text to 280 characters with ellipsis if not viewing full text
+        if (!this.state.active && pluginDescriptionText.length > 277) {
+            pluginDescriptionText = pluginDescriptionText.slice(0, 277) + '...';
+        }
+
         const pluginDescription = React.createElement(
             'div',
             {
                 key: this.props.pluginData.id + 'description',
                 className: 'pluginDescription'
             },
-            this.state.manifest
-                ? this.state.manifest.PluginDescription 
-                : this.props.pluginData.description || 'No description provided.'
+            pluginDescriptionText
         );
 
         const pluginStars = this.props.pluginData.git_url
