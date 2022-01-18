@@ -17,6 +17,7 @@ const approvedPlugins = [
     "https://github.com/FormIt3D/RebuildCurve",
     "https://github.com/FormIt3D/SortMaterials",
     "https://github.com/FormIt3D/ValidateCleanModel",
+     "https://jhauswirth.github.io/FormItGuideLines",
     //"https://github.com/FormIt3D/DialogFromToolbar",
     //"https://github.com/FormIt3D/HelloBlockAsync",
     //"https://github.com/FormIt3D/ModalDialog",
