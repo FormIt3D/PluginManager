@@ -20,13 +20,14 @@ class SearchPlugins extends React.Component {
                 placeholder: 'Search all plugins',
                 value: this.state.searchTerm || '',
                 onChange: (e) => {
-                    const value = e.target.value;
+                    const value = e.target.value,
+                        valueLower = value.toLowerCase();
                     this.setState({
                         searchTerm: value, 
                         searchedPlugins: this.props.plugins.filter((repo) => {
                             // Check if the plugin information contains the search term(s)
                             return (repo.manifest ? (repo.manifest.PluginName + ' ' + repo.manifest.PluginDescription + ' ' + repo.owner.login) : 
-                                repo.name).toLowerCase().replace(/-/g, ' ').includes(value);
+                                repo.name).toLowerCase().replace(/-/g, ' ').includes(valueLower);
                         })
                     })
                 },

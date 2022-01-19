@@ -44,9 +44,22 @@ class AppRoot extends React.Component {
                 q: 'topic:formit-plugin-recommended'//&sort=stars&order=desc',
             });
 
+            //Get hard-coded plugins built for developers
             const developersPluginsResult = await this.octokit.search.repos({
                 q: developersPluginsRepos.map((devRepo) => 'repo:' + devRepo).join(' ')
             });
+
+            //Append plugins tagged with "formit-plugin-developers"
+            developersPluginsResult.data.items.push(...(await this.octokit.search.repos({
+                q: 'topic:formit-plugin-developers'
+            })).data.items.filter((taggedPlugin) => {
+                for (let hcPlugin of developersPluginsResult.data.items) {
+                    if (taggedPlugin.name == hcPlugin.name) {
+                        return false;
+                    }
+                }
+                return true;
+            }));
 
             const publicPlugins = publicPluginsResult.data.items.filter(hasPagesFilter);
             const developersPlugins = developersPluginsResult.data.items.filter(hasPagesFilter);
