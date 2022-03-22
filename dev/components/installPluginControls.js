@@ -6,6 +6,13 @@ class InstallPluginControls extends React.Component {
         this.state = {
             isOpen: this.props.isOpen
         };
+
+        FormItInterface.SubscribeMessage("FormIt.Message.kInstallPlugin", (data) => {
+            let jsonObj = JSON.parse(data);
+            if (this.state.installUrl.startsWith(jsonObj.payload)) {
+                this.setState({installUrl: ''});
+            }
+        });
     }
 
     render(){
@@ -41,7 +48,6 @@ class InstallPluginControls extends React.Component {
                         onClick: () => {
                             if (this.state.installUrl){
                                 this.props.addPlugin(this.state.installUrl);
-                                this.setState({installUrl: ''});
                             }
                         },
                         title:'Add'
@@ -55,7 +61,6 @@ class InstallPluginControls extends React.Component {
                         onClick: () => {
                             if (this.state.installUrl){
                                 this.props.loadPlugin(this.state.installUrl);
-                                this.setState({installUrl: ''});
                             }
                         },
                         title:'Load'
