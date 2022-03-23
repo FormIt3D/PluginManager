@@ -11,8 +11,35 @@ class InstallPluginControls extends React.Component {
             let jsonObj = JSON.parse(data);
             if (this.state.installUrl.startsWith(jsonObj.payload)) {
                 this.setState({installUrl: ''});
+                if(this.notificationHandle)
+                    FormIt.UI.CloseNotification(this.notificationHandle);
+                FormIt.UI.ShowNotification(
+                    "Plugin Installed",
+                    FormIt.NotificationType.Success,
+                    3000
+                );
             }
         });
+    }
+
+    notificationHandle
+
+    async showLoadingMessage(isLoading = false) {
+        let copyInstallUrl = this.state.installUrl
+        this.notificationHandle = await FormIt.UI.ShowNotification(
+            "Attempting to install plugin...",
+            FormIt.NotificationType.Information,
+            5000
+        );
+        setTimeout(() => {
+            if(this.state.installUrl == copyInstallUrl) {
+                FormIt.UI.ShowNotification(
+                    `Failed to ${isLoading ? 'load' : 'install'} plugin. Check your internet connection or ${FormItInterface.Platform == 'Windows' ? 'Script Editor' : 'console'} for errors.`,
+                    FormIt.NotificationType.Error,
+                    10000
+                );
+            }
+        }, 5000);
     }
 
     render(){
@@ -48,6 +75,7 @@ class InstallPluginControls extends React.Component {
                         onClick: () => {
                             if (this.state.installUrl){
                                 this.props.addPlugin(this.state.installUrl);
+                                this.showLoadingMessage();
                             }
                         },
                         title:'Add'
@@ -61,6 +89,7 @@ class InstallPluginControls extends React.Component {
                         onClick: () => {
                             if (this.state.installUrl){
                                 this.props.loadPlugin(this.state.installUrl);
+                                this.showLoadingMessage(true);
                             }
                         },
                         title:'Load'
