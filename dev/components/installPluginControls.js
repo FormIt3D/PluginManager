@@ -14,7 +14,7 @@ class InstallPluginControls extends React.Component {
                 if(this.notificationHandle)
                     FormIt.UI.CloseNotification(this.notificationHandle);
                 FormIt.UI.ShowNotification(
-                    "Plugin Installed",
+                    "Plugin installed.",
                     FormIt.NotificationType.Success,
                     3000
                 );
