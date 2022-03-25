@@ -89,7 +89,7 @@ class InstallPluginControls extends React.Component {
                         onClick: () => {
                             if (this.state.installUrl){
                                 this.props.loadPlugin(this.state.installUrl);
-                                this.showLoadingMessage(true);
+                                this.setState({installUrl: ''});
                             }
                         },
                         title:'Load'
