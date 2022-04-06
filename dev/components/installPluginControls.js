@@ -7,9 +7,8 @@ class InstallPluginControls extends React.Component {
             isOpen: this.props.isOpen
         };
 
-        FormItInterface.SubscribeMessage("FormIt.Message.kInstallPlugin", (data) => {
-            let jsonObj = JSON.parse(data);
-            if (this.state.installUrl.startsWith(jsonObj.payload)) {
+        FormItInterface.SubscribeMessage("FormIt.Message.kInstallPlugin", (installedPlugin) => {
+            if (this.state.installUrl.startsWith(installedPlugin)) {
                 this.setState({installUrl: ''});
                 if(this.notificationHandle)
                     FormIt.UI.CloseNotification(this.notificationHandle);
