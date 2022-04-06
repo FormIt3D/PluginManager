@@ -316,10 +316,14 @@ class AppRoot extends React.Component {
         if (isInstalling){
             //TODO async/await wrappers
             //FormIt.InstallPlugin(pagesUrl);
-            FormItInterface.CallMethod("FormIt.InstallPlugin", pagesUrl);
+            FormItInterface.CallMethod("FormIt.InstallPlugin", pagesUrl, () => {
+                this.organizeToInstalledPlugins();
+            });
         }else{
             //FormIt.UninstallPlugin(pagesUrl);
-            FormItInterface.CallMethod("FormIt.UninstallPlugin", pagesUrl);
+            FormItInterface.CallMethod("FormIt.UninstallPlugin", pagesUrl, () => {
+                this.organizeToInstalledPlugins();
+            });
         }
     }
 

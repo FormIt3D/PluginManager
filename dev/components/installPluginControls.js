@@ -6,39 +6,6 @@ class InstallPluginControls extends React.Component {
         this.state = {
             isOpen: this.props.isOpen
         };
-
-        FormItInterface.SubscribeMessage("FormIt.Message.kInstallPlugin", (installedPlugin) => {
-            if (this.state.installUrl.startsWith(installedPlugin)) {
-                this.setState({installUrl: ''});
-                if(this.notificationHandle)
-                    FormIt.UI.CloseNotification(this.notificationHandle);
-                FormIt.UI.ShowNotification(
-                    "Plugin installed.",
-                    FormIt.NotificationType.Success,
-                    3000
-                );
-            }
-        });
-    }
-
-    notificationHandle
-
-    async showLoadingMessage(isLoading = false) {
-        let copyInstallUrl = this.state.installUrl
-        this.notificationHandle = await FormIt.UI.ShowNotification(
-            "Attempting to install plugin...",
-            FormIt.NotificationType.Information,
-            5000
-        );
-        setTimeout(() => {
-            if(this.state.installUrl == copyInstallUrl) {
-                FormIt.UI.ShowNotification(
-                    `Failed to ${isLoading ? 'load' : 'install'} plugin. Check your internet connection or ${FormItInterface.Platform == 'Windows' ? 'Script Editor' : 'console'} for errors.`,
-                    FormIt.NotificationType.Error,
-                    10000
-                );
-            }
-        }, 5000);
     }
 
     render(){
@@ -74,7 +41,7 @@ class InstallPluginControls extends React.Component {
                         onClick: () => {
                             if (this.state.installUrl){
                                 this.props.addPlugin(this.state.installUrl);
-                                this.showLoadingMessage();
+                                this.setState({installUrl: ''});
                             }
                         },
                         title:'Add'
