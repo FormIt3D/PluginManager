@@ -11,6 +11,7 @@ const approvedPlugins = [
     "https://github.com/FormIt3D/ManageAxes",
     "https://github.com/FormIt3D/ManageAttributes",
     "https://github.com/FormIt3D/ManageCameras",
+    "https://github.com/FormIt3D/MatchPhoto",
     "https://github.com/FormIt3D/MeshUnmeshAll",
     "https://github.com/FormIt3D/PropertiesPlus",
     "https://github.com/FormIt3D/RandomRotateScale",
