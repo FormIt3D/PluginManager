@@ -94,7 +94,7 @@ class AppRoot extends React.Component {
 
             if (!versionsObject.ok) {
                 // we couldn't find versions.json
-                console.log("No versions.json found.");
+                // console.log("No versions.json found.");
                 let results = await searchOnRoot();
                 manifestObject = results.manifestObject;
                 manifestURL = results.manifestURL;
@@ -135,13 +135,13 @@ class AppRoot extends React.Component {
                 // did we get a version path from versions.json?
                 if (versionPath === '') {
                     // no valid version path
-                    console.log("No valid path found in versions.json.");
+                    //console.log("No valid path found in versions.json.");
                     let results = await searchOnRoot();
                     manifestObject = results.manifestObject;
                     manifestURL = results.manifestURL;
                 }
                 else {
-                    console.log("Adding to plugin list: " + pluginData.name + " for FormIt version " + pluginMinimumVersionMajor + "." + pluginMinimumVersionMinor + " or newer.");
+                    //console.log("Adding to plugin list: " + pluginData.name + " for FormIt version " + pluginMinimumVersionMajor + "." + pluginMinimumVersionMinor + " or newer.");
 
                     const versionedURL = (pluginData.git_url) 
                     ? `https://${pluginData.owner.login}.github.io/${pluginData.name}/${versionPath}/manifest.json`
@@ -175,7 +175,7 @@ class AppRoot extends React.Component {
     }
 
     async searchOnRoot() {
-        console.log("No versioned of manifest.json found for " + pluginName + " plugin, looking in root folder instead...");
+        //console.log("No versioned of manifest.json found for " + pluginName + " plugin, looking in root folder instead...");
         // first, try to get manifest.json at the root folder
         let manifestURL = (pluginData.git_url) 
             ? `https://${pluginData.owner.login}.github.io/${pluginData.name}/manifest.json`
