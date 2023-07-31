@@ -84,37 +84,22 @@ class AppRoot extends React.Component {
 
     async fetchManifest(pluginData){
         try {
-            // first, try to get manifest.json at the root folder
-            let manifestURL = (pluginData.git_url) 
-                ? `https://${pluginData.owner.login}.github.io/${pluginData.name}/manifest.json`
-                : `${pluginData.local_url}/manifest.json`;
+            // try to get versions.json
+            const versionsURL = (pluginData.git_url) 
+            ? `https://${pluginData.owner.login}.github.io/${pluginData.name}/versions.json`
+            : `${pluginData.local_url}/versions.json`;
 
-            const pluginName = (pluginData.git_url) 
-            ? `${pluginData.name}`
-            : `${pluginData.local_url}`;
+            const versionsObject = await fetch(versionsURL);
+            let manifestObject = null;
 
-            // this may throw a 404 if the plugin's manifest is not at the root
-            // this is a valid configuration - the plugin may be versioned and its versions may exclusively live in subfolders
-            let manifestObject = await fetch(manifestURL);
-
-            // if we couldn't find it at the root, use versions.json to get the versioned path
-            if (!manifestObject.ok) {
-
-                console.log("No manifest.json found at the root of " + pluginName + " plugin, looking for a versioned subdir instead...");
-
-                // try to get versions.json
-                const versionsURL = (pluginData.git_url) 
-                ? `https://${pluginData.owner.login}.github.io/${pluginData.name}/versions.json`
-                : `${pluginData.local_url}/versions.json`;
-
-                const versionsObject = await fetch(versionsURL);
-
-                if (!versionsObject.ok) {
-
-                    // we couldn't find versions.json
-                    throw Error("No versions.json found.");
-                }
- 
+            if (!versionsObject.ok) {
+                // we couldn't find versions.json
+                // console.log("No versions.json found.");
+                let results = await searchOnRoot();
+                manifestObject = results.manifestObject;
+                manifestURL = results.manifestURL;
+            }
+            else {
                 // get the versions JSON from the object
                 const versionsJSON = await versionsObject.json();
 
@@ -149,25 +134,29 @@ class AppRoot extends React.Component {
 
                 // did we get a version path from versions.json?
                 if (versionPath === '') {
-
                     // no valid version path
-                    throw Error("No valid path found in versions.json.");
+                    //console.log("No valid path found in versions.json.");
+                    let results = await searchOnRoot();
+                    manifestObject = results.manifestObject;
+                    manifestURL = results.manifestURL;
                 }
+                else {
+                    //console.log("Adding to plugin list: " + pluginData.name + " for FormIt version " + pluginMinimumVersionMajor + "." + pluginMinimumVersionMinor + " or newer.");
 
-                console.log("Adding to plugin list: " + pluginData.name + " for FormIt version " + pluginMinimumVersionMajor + "." + pluginMinimumVersionMinor + " or newer.");
+                    const versionedURL = (pluginData.git_url) 
+                    ? `https://${pluginData.owner.login}.github.io/${pluginData.name}/${versionPath}/manifest.json`
+                    : `${pluginData.local_url}/${versionPath}/manifest.json`;
 
-                const versionedURL = (pluginData.git_url) 
-                ? `https://${pluginData.owner.login}.github.io/${pluginData.name}/${versionPath}/manifest.json`
-                : `${pluginData.local_url}/${versionPath}/manifest.json`;
-
-                manifestObject = await fetch(versionedURL);
-                manifestURL = versionedURL;
-
-                if (!manifestObject.ok) {
-
-                    // we still couldn't find manifest.json
-                    throw Error("No manifest.json found in the version subfolder, either. " + manifestObject.statusText);
+                    manifestObject = await fetch(versionedURL);
+                    manifestURL = versionedURL;
                 }
+            } 
+            
+            // if we couldn't find it in a versioned path, check for root folder version
+            if (!manifestObject.ok) {
+                let results = await searchOnRoot();
+                manifestObject = results.manifestObject;
+                manifestURL = results.manifestURL;
             }
             else
             {
@@ -175,7 +164,6 @@ class AppRoot extends React.Component {
             }
 
             let manifestJSON = await manifestObject.json();
-
             manifestJSON.manifestURL = manifestURL;
 
             return manifestJSON;
@@ -184,6 +172,27 @@ class AppRoot extends React.Component {
             console.log('Could not fetch manifest for', pluginData.name, e);
             return false;
         }
+    }
+
+    async searchOnRoot() {
+        //console.log("No versioned of manifest.json found for " + pluginName + " plugin, looking in root folder instead...");
+        // first, try to get manifest.json at the root folder
+        let manifestURL = (pluginData.git_url) 
+            ? `https://${pluginData.owner.login}.github.io/${pluginData.name}/manifest.json`
+            : `${pluginData.local_url}/manifest.json`;
+
+        const pluginName = (pluginData.git_url) 
+            ? `${pluginData.name}`
+            : `${pluginData.local_url}`;
+
+        // this may throw a 404 if the plugin's manifest is not at the root
+        // this is a valid configuration - the plugin may be versioned and its versions may exclusively live in subfolders
+        let manifestObject = await fetch(manifestURL);
+        if (!manifestObject.ok) {
+             // we still couldn't find manifest.json
+            throw Error("No manifest.json found in the version subfolder, either. " + manifestObject.statusText);
+        }
+        return { manifestObject, manifestURL }
     }
 
     //TODO trigger this on plugin install so it updates installed list.
